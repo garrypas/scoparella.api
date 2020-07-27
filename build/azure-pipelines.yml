@@ -10,7 +10,7 @@ parameters:
 
 stages:
   - stage: preprod
-    condition: neq('${{ parameters.stage }}', 'preprod')
+    condition: eq('${{ parameters.stage }}', 'preprod')
     jobs:
       - job: "Build"
         steps:
