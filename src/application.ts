@@ -22,8 +22,9 @@ import {register as registerInterceptors} from "./auth-strategies/passportMiddle
 import {ConsoleLogger} from "./Logger";
 import {LoggingInterceptor} from "./middleware/LoggingInterceptor";
 import {MySequence} from "./sequence";
+import {SecretsService} from "./services/secrets.service";
 export {ApplicationConfig};
-const secrets = require("./../secrets.json");
+const secrets = SecretsService.getSecrets();
 const thirdPartyConfig: Record<
   string,
   object

@@ -1,8 +1,12 @@
 import {readFileSync} from "fs";
 import {sign} from "jsonwebtoken";
 import {v4 as newUuid} from "uuid";
+import {SecretsService} from "../../services/secrets.service";
 export type PlayerAuth = {playerId: string; auth: string};
-const privateKey: string = readFileSync("./RS512.key", {encoding: "utf-8"});
+const secrets = SecretsService.getSecrets();
+const privateKey: string = readFileSync(secrets.keys.privateKey, {
+  encoding: "utf-8",
+});
 
 export class JwtAuthenticationBuilder {
   private playerId: any;

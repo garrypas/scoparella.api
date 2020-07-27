@@ -14,6 +14,7 @@
   "scripts": {
     "build": "lb-tsc",
     "build:watch": "lb-tsc --watch",
+    "create-test-keys": "bash create-test-keys.sh",
     "lint": "npm run prettier:check && npm run eslint",
     "lint:fix": "npm run eslint:fix && npm run prettier:fix",
     "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
@@ -22,7 +23,7 @@
     "eslint": "lb-eslint --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
     "pretest": "npm run clean && npm run build",
-    "test": "npm run lint:fix && lb-mocha --allow-console-logs \"dist/__tests__\"",
+    "test": "npm run create-test-keys && npm run lint:fix && cross-env TEST=1 lb-mocha --allow-console-logs \"dist/__tests__\"",
     "posttest": "npm run lint",
     "docker:build": "docker build -t scoparella.api .",
     "docker:run": "docker run -p 3000:3000 -d scoparella.api",
