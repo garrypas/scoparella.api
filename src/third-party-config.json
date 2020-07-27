@@ -1,0 +1,48 @@
+{
+  "google": {
+    "provider": "google",
+    "module": "passport-google-oauth2",
+    "strategy": "OAuth2Strategy",
+    "clientID": "212655345511-daoif0tgg2l84latd1m09vdded7n1pb6.apps.googleusercontent.com",
+    "callbackURL": "/api/auth/thirdparty/google/callback",
+    "authPath": "/api/auth/thirdparty/google",
+    "callbackPath": "/api/auth/thirdparty/google/callback",
+    "successRedirect": "/auth/account",
+    "failureRedirect": "/login",
+    "scope": [
+      "email",
+      "profile"
+    ],
+    "failureFlash": true
+  },
+  "facebook": {
+    "provider": "facebook",
+    "module": "passport-facebook",
+    "profileFields": [
+      "gender",
+      "link",
+      "locale",
+      "name",
+      "timezone",
+      "verified",
+      "email",
+      "updated_time",
+      "displayName",
+      "id"
+    ],
+    "callbackURL": "/api/auth/thirdparty/facebook/callback",
+    "authPath": "/api/auth/thirdparty/facebook",
+    "callbackPath": "/api/auth/thirdparty/facebook/callback",
+    "successRedirect": "/auth/account",
+    "failureRedirect": "/login",
+    "scope": [
+      "email"
+    ],
+    "failureFlash": true,
+    "clientID": "304583097566354"
+  },
+  "jwt": {
+    "audience": "localhost.com",
+    "algorithm": "RS512"
+  }
+}

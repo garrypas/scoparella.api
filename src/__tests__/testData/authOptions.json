@@ -1,0 +1,5 @@
+{
+  "passphrase": "",
+  "algorithm": "RS512",
+  "audience": "localhost.com"
+}

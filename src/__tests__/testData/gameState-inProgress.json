@@ -1,0 +1,887 @@
+{
+    "deck": {
+        "deck": []
+    },
+    "hands": [
+        {
+            "captured": [
+                {
+                    "face": "Seven",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Two",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Knight",
+                    "suit": "Swords"
+                },
+                {
+                    "face": "Six",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Ace",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Seven",
+                    "suit": "Swords"
+                },
+                {
+                    "face": "Knight",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Ace",
+                    "suit": "Swords"
+                },
+                {
+                    "face": "King",
+                    "suit": "Coins"
+                },
+                {
+                    "face": "Five",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Two",
+                    "suit": "Coins"
+                },
+                {
+                    "face": "Seven",
+                    "suit": "Coins"
+                },
+                {
+                    "face": "Knave",
+                    "suit": "Swords"
+                },
+                {
+                    "face": "Knave",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Knave",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Knave",
+                    "suit": "Coins"
+                }
+            ],
+            "cards": [],
+            "player": {
+                "id": "PLAYER_1_ID"
+            }
+        },
+        {
+            "captured": [
+                {
+                    "face": "Three",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Three",
+                    "suit": "Swords"
+                },
+                {
+                    "face": "Four",
+                    "suit": "Coins"
+                },
+                {
+                    "face": "Four",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Five",
+                    "suit": "Coins"
+                },
+                {
+                    "face": "Three",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Two",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "King",
+                    "suit": "Swords"
+                },
+                {
+                    "face": "Ace",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Five",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Six",
+                    "suit": "Coins"
+                },
+                {
+                    "face": "Seven",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Three",
+                    "suit": "Coins"
+                },
+                {
+                    "face": "King",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Knight",
+                    "suit": "Coins"
+                },
+                {
+                    "face": "Knight",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Four",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Four",
+                    "suit": "Swords"
+                }
+            ],
+            "cards": [
+                {
+                    "face": "Six",
+                    "suit": "Cups"
+                }
+            ],
+            "player": {
+                "id": "PLAYER_2_ID"
+            }
+        }
+    ],
+    "lastTaker": {
+        "captured": [
+            {
+                "face": "Seven",
+                "suit": "Cups"
+            },
+            {
+                "face": "Two",
+                "suit": "Cups"
+            },
+            {
+                "face": "Knight",
+                "suit": "Swords"
+            },
+            {
+                "face": "Six",
+                "suit": "Clubs"
+            },
+            {
+                "face": "Ace",
+                "suit": "Cups"
+            },
+            {
+                "face": "Seven",
+                "suit": "Swords"
+            },
+            {
+                "face": "Knight",
+                "suit": "Clubs"
+            },
+            {
+                "face": "Ace",
+                "suit": "Swords"
+            },
+            {
+                "face": "King",
+                "suit": "Coins"
+            },
+            {
+                "face": "Five",
+                "suit": "Cups"
+            },
+            {
+                "face": "Two",
+                "suit": "Coins"
+            },
+            {
+                "face": "Seven",
+                "suit": "Coins"
+            },
+            {
+                "face": "Knave",
+                "suit": "Swords"
+            },
+            {
+                "face": "Knave",
+                "suit": "Clubs"
+            },
+            {
+                "face": "Knave",
+                "suit": "Cups"
+            },
+            {
+                "face": "Knave",
+                "suit": "Coins"
+            }
+        ],
+        "cards": [],
+        "player": {
+            "id": "PLAYER_1_ID"
+        }
+    },
+    "numberOfPlayers": 2,
+    "roundsPlayed": 0,
+    "scoreboard": {
+        "scopas": [
+            [],
+            []
+        ],
+        "scores": [
+            {
+                "player": {
+                    "id": "PLAYER_1_ID"
+                },
+                "score": 10
+            },
+            {
+                "player": {
+                    "id": "PLAYER_2_ID"
+                },
+                "score": 10
+            }
+        ]
+    },
+    "table": {
+        "cards": [
+            {
+                "face": "Six",
+                "suit": "Swords"
+            },
+            {
+                "face": "King",
+                "suit": "Clubs"
+            },
+            {
+                "face": "Five",
+                "suit": "Swords"
+            },
+            {
+                "face": "Ace",
+                "suit": "Coins"
+            },
+            {
+                "face": "Two",
+                "suit": "Swords"
+            }
+        ]
+    },
+    "whoseTurn": {
+        "captured": [
+            {
+                "face": "Three",
+                "suit": "Clubs"
+            },
+            {
+                "face": "Three",
+                "suit": "Swords"
+            },
+            {
+                "face": "Four",
+                "suit": "Coins"
+            },
+            {
+                "face": "Four",
+                "suit": "Cups"
+            },
+            {
+                "face": "Five",
+                "suit": "Coins"
+            },
+            {
+                "face": "Three",
+                "suit": "Cups"
+            },
+            {
+                "face": "Two",
+                "suit": "Clubs"
+            },
+            {
+                "face": "King",
+                "suit": "Swords"
+            },
+            {
+                "face": "Ace",
+                "suit": "Clubs"
+            },
+            {
+                "face": "Five",
+                "suit": "Clubs"
+            },
+            {
+                "face": "Six",
+                "suit": "Coins"
+            },
+            {
+                "face": "Seven",
+                "suit": "Clubs"
+            },
+            {
+                "face": "Three",
+                "suit": "Coins"
+            },
+            {
+                "face": "King",
+                "suit": "Cups"
+            },
+            {
+                "face": "Knight",
+                "suit": "Coins"
+            },
+            {
+                "face": "Knight",
+                "suit": "Cups"
+            },
+            {
+                "face": "Four",
+                "suit": "Clubs"
+            },
+            {
+                "face": "Four",
+                "suit": "Swords"
+            }
+        ],
+        "cards": [
+            {
+                "face": "Six",
+                "suit": "Cups"
+            }
+        ],
+        "player": {
+            "id": "PLAYER_2_ID"
+        }
+    },
+    "moves": [
+        {
+            "card": {
+                "face": "Two",
+                "suit": "Cups"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:05.726Z"
+        },
+        {
+            "card": {
+                "face": "Three",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [
+                {
+                    "face": "Three",
+                    "suit": "Clubs"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:05.766Z"
+        },
+        {
+            "card": {
+                "face": "Knight",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [
+                {
+                    "face": "Seven",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Two",
+                    "suit": "Cups"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:05.802Z"
+        },
+        {
+            "card": {
+                "face": "Four",
+                "suit": "Coins"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:05.837Z"
+        },
+        {
+            "card": {
+                "face": "Ace",
+                "suit": "Cups"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:05.869Z"
+        },
+        {
+            "card": {
+                "face": "Four",
+                "suit": "Cups"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [
+                {
+                    "face": "Four",
+                    "suit": "Coins"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:05.906Z"
+        },
+        {
+            "card": {
+                "face": "Knight",
+                "suit": "Clubs"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:05.941Z"
+        },
+        {
+            "card": {
+                "face": "Three",
+                "suit": "Cups"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:05.981Z"
+        },
+        {
+            "card": {
+                "face": "Seven",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [
+                {
+                    "face": "Six",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Ace",
+                    "suit": "Cups"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:06.025Z"
+        },
+        {
+            "card": {
+                "face": "Ace",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.065Z"
+        },
+        {
+            "card": {
+                "face": "King",
+                "suit": "Coins"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [
+                {
+                    "face": "Knight",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Ace",
+                    "suit": "Swords"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:06.098Z"
+        },
+        {
+            "card": {
+                "face": "Two",
+                "suit": "Clubs"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.143Z"
+        },
+        {
+            "card": {
+                "face": "Ace",
+                "suit": "Clubs"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.180Z"
+        },
+        {
+            "card": {
+                "face": "King",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [
+                {
+                    "face": "Five",
+                    "suit": "Coins"
+                },
+                {
+                    "face": "Three",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Two",
+                    "suit": "Clubs"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:06.212Z"
+        },
+        {
+            "card": {
+                "face": "Five",
+                "suit": "Clubs"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.244Z"
+        },
+        {
+            "card": {
+                "face": "Seven",
+                "suit": "Clubs"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.276Z"
+        },
+        {
+            "card": {
+                "face": "Three",
+                "suit": "Coins"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.313Z"
+        },
+        {
+            "card": {
+                "face": "Six",
+                "suit": "Coins"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [
+                {
+                    "face": "Ace",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Five",
+                    "suit": "Clubs"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:06.346Z"
+        },
+        {
+            "card": {
+                "face": "Six",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.393Z"
+        },
+        {
+            "card": {
+                "face": "King",
+                "suit": "Cups"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [
+                {
+                    "face": "Seven",
+                    "suit": "Clubs"
+                },
+                {
+                    "face": "Three",
+                    "suit": "Coins"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:06.437Z"
+        },
+        {
+            "card": {
+                "face": "Knight",
+                "suit": "Coins"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.477Z"
+        },
+        {
+            "card": {
+                "face": "Five",
+                "suit": "Cups"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.517Z"
+        },
+        {
+            "card": {
+                "face": "Two",
+                "suit": "Coins"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.559Z"
+        },
+        {
+            "card": {
+                "face": "King",
+                "suit": "Clubs"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.598Z"
+        },
+        {
+            "card": {
+                "face": "Seven",
+                "suit": "Coins"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [
+                {
+                    "face": "Five",
+                    "suit": "Cups"
+                },
+                {
+                    "face": "Two",
+                    "suit": "Coins"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:06.641Z"
+        },
+        {
+            "card": {
+                "face": "Knight",
+                "suit": "Cups"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [
+                {
+                    "face": "Knight",
+                    "suit": "Coins"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:06.679Z"
+        },
+        {
+            "card": {
+                "face": "Knave",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.717Z"
+        },
+        {
+            "card": {
+                "face": "Five",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.756Z"
+        },
+        {
+            "card": {
+                "face": "Knave",
+                "suit": "Clubs"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [
+                {
+                    "face": "Knave",
+                    "suit": "Swords"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:06.792Z"
+        },
+        {
+            "card": {
+                "face": "Ace",
+                "suit": "Coins"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.833Z"
+        },
+        {
+            "card": {
+                "face": "Four",
+                "suit": "Clubs"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.871Z"
+        },
+        {
+            "card": {
+                "face": "Knave",
+                "suit": "Cups"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.909Z"
+        },
+        {
+            "card": {
+                "face": "Two",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [],
+            "timestamp": "2020-07-26T00:28:06.948Z"
+        },
+        {
+            "card": {
+                "face": "Four",
+                "suit": "Swords"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_2_ID"
+            },
+            "taken": [
+                {
+                    "face": "Four",
+                    "suit": "Clubs"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:06.989Z"
+        },
+        {
+            "card": {
+                "face": "Knave",
+                "suit": "Coins"
+            },
+            "isScopa": false,
+            "player": {
+                "id": "PLAYER_1_ID"
+            },
+            "taken": [
+                {
+                    "face": "Knave",
+                    "suit": "Cups"
+                }
+            ],
+            "timestamp": "2020-07-26T00:28:07.032Z"
+        }
+    ],
+    "status": "In progress"
+}

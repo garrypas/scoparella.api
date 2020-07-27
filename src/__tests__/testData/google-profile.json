@@ -1,0 +1,22 @@
+{
+  "provider": "google",
+  "sub": "113331727217147025715",
+  "id": "113850267828047875708",
+  "displayName": "John Smith",
+  "name": {
+    "givenName": "John",
+    "familyName": "Smith"
+  },
+  "given_name": "John",
+  "family_name": "Smith",
+  "email_verified": true,
+  "verified": true,
+  "language": "en-GB",
+  "email": "john.smith@emailsim.io",
+  "emails": [
+    {
+      "value": "john.smith@emailsim.io",
+      "type": "account"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+version: "3"
+services:
+  scoparella-db:
+    image: microsoft/mssql-server-linux:latest
+    ports:
+      - "1440:1433"
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "SA_PASSWORD=P@ss55w0rd"
+    volumes:
+      - .:/start
+    command:
+      - /start/mssql.setup.sh
