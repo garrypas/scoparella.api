@@ -10,6 +10,7 @@ import {
 } from "@loopback/rest";
 import {gameAuthorization} from "../auth-strategies/gameAuthorization";
 import {User} from "../auth-strategies/User";
+import {ActiveGamesResponseDto} from "../dtos/ActiveGamesResponseDto";
 import {GameResponseDto} from "../dtos/GameResponseDto";
 import {Game} from "../models";
 import {GameService} from "../services";
@@ -49,7 +50,9 @@ export class GameQueriesController {
       },
     },
   })
-  async count(): Promise<number> {
-    return this.gameService.countActiveGames();
+  async count(): Promise<ActiveGamesResponseDto> {
+    return {
+      numberOfGames: await this.gameService.countActiveGames(),
+    };
   }
 }
