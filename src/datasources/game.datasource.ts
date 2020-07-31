@@ -7,8 +7,8 @@ const config = {
   // url: 'localhost',
   host: "localhost",
   port: 1440,
-  user: "SA",
-  password: "P@ss55w0rd",
+  user: "scoparella",
+  password: process.env.SQL_PASSWORD,
   database: "scoparella",
   schema: "scopa",
 };

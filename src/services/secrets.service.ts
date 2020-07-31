@@ -3,7 +3,6 @@ import {resolve} from "path";
 export class SecretsService {
   private static secrets: any = null;
   static getSecrets() {
-    console.log(process.env);
     if (!this.secrets) {
       const path = resolve(
         __dirname,

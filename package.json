@@ -23,7 +23,7 @@
     "eslint": "lb-eslint --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
     "pretest": "npm run clean && npm run build",
-    "test": "npm run create-test-keys && npm run lint:fix && cross-env TEST=1 lb-mocha --allow-console-logs \"dist/__tests__\"",
+    "test": "npm run create-test-keys && npm run lint:fix && cross-env TEST=1 SQL_PASSWORD=P@ss55w0rd lb-mocha --allow-console-logs \"dist/__tests__\"",
     "posttest": "npm run lint",
     "docker:build": "docker build -t scoparella.api .",
     "docker:run": "docker run -p 3000:3000 -d scoparella.api",

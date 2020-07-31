@@ -34,3 +34,12 @@ VALUES
   ('inProgress'),
   ('completed'),
   ('cancelled')
+
+CREATE LOGIN scoparella WITH PASSWORD = 'P@ss55w0rd'
+GO
+
+CREATE USER scoparella FROM login scoparella
+GO
+
+GRANT SELECT, INSERT, UPDATE ON SCHEMA :: scopa TO scoparella
+GO

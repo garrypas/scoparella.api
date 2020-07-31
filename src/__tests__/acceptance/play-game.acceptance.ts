@@ -24,7 +24,7 @@ describe("Play a whole game", () => {
   });
 
   describe("Authenticated", function () {
-    this.timeout(20000);
+    this.timeout(30000);
     let player1: PlayerAuth;
     let player2: PlayerAuth;
     let current: PlayerAuth;

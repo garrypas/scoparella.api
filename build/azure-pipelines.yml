@@ -1,5 +1,11 @@
 trigger:
-- master
+  branches:
+    include:
+      - master
+  paths:
+    exclude:
+      - documentation/*
+      - README.md
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -7,12 +13,29 @@ pool:
 parameters:
 - name: stage
   default: "preprod"
+  values:
+    - preprod_init
+    - preprod
 
 stages:
   - stage: preprod
-    condition: eq('${{ parameters.stage }}', 'preprod')
+    condition: eq('${{ parameters.stage }}', 'preprod_init')
     jobs:
+      - job: "Initial_Setup"
+        condition: eq('${{ parameters.stage }}', 'preprod_init')
+        steps:
+          # There is a terraform task available in Devops, we should probably use that instead...
+        - script: |
+            wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
+            unzip terraform_0.12.24_linux_amd64.zip
+            mv terraform ~/bin
+            cd ./terraform/preprod_init && terraform init && terraform plan && terraform apply -auto-approve
+          displayName: 'Terraform'
+        - script: |
+            bash ./create-keys.sh
+          displayName: 'Create Keys'
       - job: "Build"
+        condition: eq('${{ parameters.stage }}', 'preprod')
         steps:
         - task: NodeTool@0
           inputs:
@@ -21,13 +44,21 @@ stages:
             npm i && npm run build
           displayName: 'NPM install and build'
         - script: |
-            ./create-keys.sh
-            sleep 10
-          displayName: 'Create SSH keys for JWTs'
-        - script: |
             npm run docker:deps
             sleep 10
           displayName: 'Spin up SQL Server'
         - script: |
-            npm t
+            ./create-test-keys.sh && npm t
           displayName: 'Run tests'
+        - task: Docker@2
+          displayName: Login to ACR
+          inputs:
+            command: login
+            containerRegistry: preprodscoparellaacr
+        - task: Docker@2
+          displayName: Build and Push
+          inputs:
+            command: buildAndPush
+            repository: scoparella/api
+            tags: |
+              scoparella_api
