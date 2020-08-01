@@ -63,6 +63,8 @@ typings/
 # Cache used by TypeScript's incremental build
 *.tsbuildinfo
 secrets.json
-*.key
-*.key.pub
+# Not really a security issue since the real keys are generated elsewhere, but cuts down on clutter.
+# Test keys needed for ACs
+RS512.key
+RS512.key.pub
 .terraform/
