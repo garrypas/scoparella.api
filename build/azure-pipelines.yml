@@ -54,7 +54,7 @@ stages:
           displayName: Login to ACR
           inputs:
             command: login
-            containerRegistry: preprodscoparellaacr
+            containerRegistry: preprodscoparellaacr.azurecr.io
         - task: Docker@2
           displayName: Build and Push
           inputs:
