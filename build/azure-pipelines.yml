@@ -54,11 +54,11 @@ stages:
           displayName: Login to ACR
           inputs:
             command: login
-            containerRegistry: preprodscoparellaacr.azurecr.io
+            containerRegistry: dockerscoparella
         - task: Docker@2
           displayName: Build and Push
           inputs:
             command: buildAndPush
-            repository: scoparella/api
+            repository: garrypassarella/scoparella
             tags: |
               scoparella_api
