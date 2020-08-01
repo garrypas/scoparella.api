@@ -55,6 +55,6 @@ stages:
             containerRegistry: 'dockerscoparella'
             repository: 'scoparella'
             command: 'buildAndPush'
-            Dockerfile: '**/Dockerfile'
+            Dockerfile: ./Dockerfile'
             tags: |
               scoparella_api
