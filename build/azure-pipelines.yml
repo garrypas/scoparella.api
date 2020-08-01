@@ -19,7 +19,6 @@ parameters:
 
 stages:
   - stage: preprod
-    condition: eq('${{ parameters.stage }}', 'preprod_init')
     jobs:
       - job: "Initial_Setup"
         condition: eq('${{ parameters.stage }}', 'preprod_init')
