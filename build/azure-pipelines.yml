@@ -47,7 +47,7 @@ stages:
             sleep 10
           displayName: 'Spin up SQL Server'
         - script: |
-            ./create-test-keys.sh && npm t
+            npm t
           displayName: 'Run tests'
         - task: Docker@2
           displayName: Build and Push
