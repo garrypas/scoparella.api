@@ -53,8 +53,8 @@ stages:
           displayName: Build and Push
           inputs:
             containerRegistry: 'dockerscoparella'
-            repository: 'scoparella'
+            repository: 'garrypassarella/scoparella'
             command: 'buildAndPush'
-            Dockerfile: ./Dockerfile'
+            Dockerfile: 'Dockerfile'
             tags: |
               scoparella_api
