@@ -5,7 +5,7 @@ resource "kubernetes_pod" "scoparella-api" {
 
   spec {
     container {
-      image = "nginx:1.7.9"
+      image = "garrypassarella/scoparella:tagname"
       name  = "scoparella-api"
 
       env {
@@ -14,13 +14,13 @@ resource "kubernetes_pod" "scoparella-api" {
       }
 
       port {
-        container_port = 8080
+        container_port = 3000
       }
 
       liveness_probe {
         http_get {
           path = "/ping"
-          port = 80
+          port = 3000
         }
 
         initial_delay_seconds = 3
@@ -42,5 +42,22 @@ resource "kubernetes_pod" "scoparella-api" {
     }
 
     dns_policy = "None"
+  }
+}
+
+resource "kubernetes_service" "scoparella-api-lb" {
+  metadata {
+    name = "scoparella-api-service"
+  }
+  spec {
+    selector = {
+      App = kubernetes_pod.scoparella-api.metadata[0].labels.App
+    }
+    port {
+      port        = 80
+      target_port = 80
+    }
+
+    type = "LoadBalancer"
   }
 }

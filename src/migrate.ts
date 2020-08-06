@@ -1,10 +1,14 @@
 import {ScoparellaApiApplication} from "./application";
+import {SecretsService} from "./services";
 
 export async function migrate(args: string[]) {
   const existingSchema = args.includes("--rebuild") ? "drop" : "alter";
   console.log("Migrating schemas (%s existing schema)", existingSchema);
 
-  const app = new ScoparellaApiApplication();
+  const app = new ScoparellaApiApplication(
+    undefined,
+    await SecretsService.getSecrets(),
+  );
   await app.boot();
   await app.migrateSchema({existingSchema});
 

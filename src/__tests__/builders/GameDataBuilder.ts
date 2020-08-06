@@ -2,6 +2,7 @@ import {Client} from "@loopback/testlab";
 import {ScoparellaApiApplication} from "../..";
 import {Game, Statuses} from "../../models";
 import {GameRepository} from "../../repositories/game.repository";
+import {SecretsService} from "../../services";
 import {JwtAuthenticationBuilder, PlayerAuth} from "./JwtAuthenticationBuilder";
 type BuiltGameResult = {game: Game; players: PlayerAuth[]};
 const gameStateEnded = require("./../testData/gameState-complete.json");
@@ -57,7 +58,11 @@ export class GameDataBuilder {
       this.status = Statuses.inProgress;
     }
     do {
-      const thisPlayer = new JwtAuthenticationBuilder().forAnyPlayer().build();
+      const thisPlayer = new JwtAuthenticationBuilder(
+        await SecretsService.getSecrets(),
+      )
+        .forAnyPlayer()
+        .build();
       const res = await this.client
         .patch("/game")
         .auth(thisPlayer.auth, {type: "bearer"})

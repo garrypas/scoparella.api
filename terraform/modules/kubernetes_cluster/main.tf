@@ -1,3 +1,10 @@
+data "azurerm_key_vault" "keyvault" {
+  name                = "${var.environment}scoparellavault"
+  resource_group_name = var.resource_group_name
+}
+
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_kubernetes_cluster" "scoparella-kube" {
   name                = "scoparella-aks1"
   location            = var.location
@@ -15,7 +22,7 @@ resource "azurerm_kubernetes_cluster" "scoparella-kube" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = {
@@ -29,4 +36,15 @@ output "client_certificate" {
 
 output "kube_config" {
   value = azurerm_kubernetes_cluster.scoparella-kube.kube_config_raw
+}
+
+resource "azurerm_key_vault_access_policy" "aks1-agentpool" {
+  key_vault_id = data.azurerm_key_vault.keyvault.id
+
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = azurerm_kubernetes_cluster.scoparella-kube.kubelet_identity[0].object_id
+
+  secret_permissions = [
+    "get", "list"
+  ]
 }

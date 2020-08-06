@@ -1,19 +1,10 @@
-import {readFileSync} from "fs";
-import {resolve} from "path";
+import {RemoteSecretService} from "./remote-secrets.service";
 export class SecretsService {
   private static secrets: any = null;
-  static getSecrets() {
+  static async getSecrets() {
     if (!this.secrets) {
-      const path = resolve(
-        __dirname,
-        `../../secrets${process.env.TEST ? ".test" : ""}.json`,
-      );
-      this.secrets = JSON.parse(
-        readFileSync(path, {
-          encoding: "utf-8",
-        }),
-      );
+      this.secrets = await RemoteSecretService.getSecrets();
     }
-    return this.secrets;
+    return Object.assign({}, this.secrets);
   }
 }

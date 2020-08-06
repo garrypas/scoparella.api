@@ -1,0 +1,16 @@
+{
+  "pod-indentity-uri": "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F",
+  "database": {
+    "name": "game",
+    "connector": "mssql",
+    "host": "localhost",
+    "port": 1440,
+    "user": "scoparella",
+    "database": "scoparella",
+    "schema": "scopa"
+  },
+  "keys": {
+    "publicKey": "./RS512.key.pub",
+    "privateKey": "./RS512.key"
+  }
+}

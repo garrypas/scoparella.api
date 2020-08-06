@@ -1,32 +1,29 @@
 import {inject, lifeCycleObserver, LifeCycleObserver} from "@loopback/core";
 import {juggler} from "@loopback/repository";
+// const config = ConfigService.getConfig().database;
+// config.password = SecretsService.getSecrets().database.password;
 
-const config = {
-  name: "game",
-  connector: "mssql",
-  // url: 'localhost',
-  host: "localhost",
-  port: 1440,
-  user: "scoparella",
-  password: process.env.SQL_PASSWORD,
-  database: "scoparella",
-  schema: "scopa",
-};
+// const config = {
+//   name: "game",
+//   connector: "mssql",
+//   // url: 'localhost',
+//   host: process.env.SQL_HOST ?? "localhost",
+//   port: parseInt(process.env.SQL_PORT ?? "1440"),
+//   user: "scoparella",
+//   password: "P@ss55w0rd",
+//   database: "scoparella",
+//   schema: "scopa",
+// };
 
-// Observe application's life cycle to disconnect the datasource when
-// application is stopped. This allows the application to be shut down
-// gracefully. The `stop()` method is inherited from `juggler.DataSource`.
-// Learn more at https://loopback.io/doc/en/lb4/Life-cycle.html
 @lifeCycleObserver("datasource")
 export class GameDataSource extends juggler.DataSource
   implements LifeCycleObserver {
   static dataSourceName = "game";
-  static readonly defaultConfig = config;
 
   constructor(
-    @inject("datasources.config.game", {optional: true})
-    dsConfig: object = config,
+    @inject("secrets.json") secrets: any,
+    @inject("config.json") config: any,
   ) {
-    super(dsConfig);
+    super(Object.assign({}, config.database, secrets.database));
   }
 }

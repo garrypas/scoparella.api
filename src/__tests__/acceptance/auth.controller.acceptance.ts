@@ -1,5 +1,4 @@
 import {Client, expect} from "@loopback/testlab";
-import {readFileSync} from "fs";
 import {verify} from "jsonwebtoken";
 import {Strategy as FacebookStrategy} from "passport-facebook";
 import {Strategy as GoogleStrategy} from "passport-google-oauth2";
@@ -11,16 +10,14 @@ const profiles: Record<string, object> = {
   facebook: require("./../testData/facebook-profile.json"),
   google: require("./../testData/google-profile.json"),
 };
-const secrets = SecretsService.getSecrets();
-const publicKey: string = readFileSync(secrets.keys.publicKey, {
-  encoding: "utf8",
-});
 
 describe("AuthController", () => {
   let app: ScoparellaApiApplication;
   let client: Client;
+  let secrets: any;
   before("setupApplication", async () => {
     ({app, client} = await setupApplication());
+    secrets = await SecretsService.getSecrets();
   });
 
   after(async () => {
@@ -82,7 +79,7 @@ describe("AuthController", () => {
           .get(`/api/auth/thirdparty/${testCase.strategy}/callback?code=123`)
           .expect(202);
         expect(response.body.jwtToken).not.to.be.undefined();
-        expect(verify(response.body.jwtToken, publicKey)).to.match({
+        expect(verify(response.body.jwtToken, secrets.publicKey)).to.match({
           aud: "localhost.com",
           provider: testCase.strategy,
         });

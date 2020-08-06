@@ -1,5 +1,6 @@
 import {ApplicationConfig} from "@loopback/core";
 import {ScoparellaApiApplication} from "./application";
+import {SecretsService} from "./services";
 
 /**
  * Export the OpenAPI spec from the application
@@ -12,7 +13,10 @@ async function exportOpenApiSpec(): Promise<void> {
     },
   };
   const outFile = process.argv[2] ?? "";
-  const app = new ScoparellaApiApplication(config);
+  const app = new ScoparellaApiApplication(
+    config,
+    await SecretsService.getSecrets(),
+  );
   await app.boot();
   await app.exportOpenApiSpec(outFile);
 }

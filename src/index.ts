@@ -1,9 +1,13 @@
 import {ApplicationConfig, ScoparellaApiApplication} from "./application";
 import {ConsoleLogger} from "./Logger";
+import {SecretsService} from "./services";
 export * from "./application";
 
 export async function main(options: ApplicationConfig = {}) {
-  const app = new ScoparellaApiApplication(options);
+  const app = new ScoparellaApiApplication(
+    options,
+    SecretsService.getSecrets(),
+  );
   await app.boot();
   await app.start();
 

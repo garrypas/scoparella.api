@@ -8,7 +8,6 @@ import {
   RestExplorerComponent,
 } from "@loopback/rest-explorer";
 import {ServiceMixin} from "@loopback/service-proxy";
-import {readFileSync} from "fs";
 import passport from "passport";
 import {StrategyOption as FacebookStrategyOption} from "passport-facebook";
 import {StrategyOptions as GoogleStrategyOptions} from "passport-google-oauth2";
@@ -22,20 +21,18 @@ import {register as registerInterceptors} from "./auth-strategies/passportMiddle
 import {ConsoleLogger} from "./Logger";
 import {LoggingInterceptor} from "./middleware/LoggingInterceptor";
 import {MySequence} from "./sequence";
-import {SecretsService} from "./services/secrets.service";
+import {ConfigService} from "./services";
 export {ApplicationConfig};
-const secrets = SecretsService.getSecrets();
+const config = ConfigService.getConfig();
 const thirdPartyConfig: Record<
   string,
   object
 > = require("./third-party-config.json");
-
 export class ScoparellaApiApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
-  constructor(options: ApplicationConfig = {}) {
+  constructor(options: ApplicationConfig = {}, private secrets: any) {
     super(options);
-
     this.bind("logging-middleware").toProvider(LoggingInterceptor);
     this.setupStrategies();
     this.add(
@@ -48,6 +45,8 @@ export class ScoparellaApiApplication extends BootMixin(
         key: "gameAuthorizationHandler",
       }),
     );
+    this.bind("secrets.json").to(secrets);
+    this.bind("config.json").to(config);
 
     this.sequence(MySequence);
 
@@ -83,20 +82,16 @@ export class ScoparellaApiApplication extends BootMixin(
 
   private setupStrategies() {
     const googleOptions = thirdPartyConfig["google"] as GoogleStrategyOptions;
-    googleOptions.clientSecret = secrets.google.clientSecret;
+    googleOptions.clientSecret = this.secrets.google.clientSecret;
 
     const facebookOptions = thirdPartyConfig[
       "facebook"
     ] as FacebookStrategyOption;
-    facebookOptions.clientSecret = secrets.facebook.clientSecret;
+    facebookOptions.clientSecret = this.secrets.facebook.clientSecret;
 
     const jwtOptions = thirdPartyConfig["jwt"] as JwtOptions;
-    jwtOptions.secretOrKey = readFileSync(secrets.keys.publicKey, {
-      encoding: "utf-8",
-    });
-    jwtOptions.privateKey = readFileSync(secrets.keys.privateKey, {
-      encoding: "utf-8",
-    });
+    jwtOptions.secretOrKey = this.secrets.publicKey;
+    jwtOptions.privateKey = this.secrets.privateKey;
 
     this.bind("passport-init-mw").to(toInterceptor(passport.initialize()));
 

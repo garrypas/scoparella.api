@@ -4,6 +4,7 @@ import {
   givenHttpServerConfig,
 } from "@loopback/testlab";
 import {ScoparellaApiApplication} from "../..";
+import {SecretsService} from "../../services";
 
 export async function setupApplication(): Promise<AppWithClient> {
   const restConfig = givenHttpServerConfig({
@@ -14,9 +15,12 @@ export async function setupApplication(): Promise<AppWithClient> {
     // port: +process.env.PORT,
   });
 
-  const app = new ScoparellaApiApplication({
-    rest: restConfig,
-  });
+  const app = new ScoparellaApiApplication(
+    {
+      rest: restConfig,
+    },
+    await SecretsService.getSecrets(),
+  );
   await app.boot();
   await app.start();
 
