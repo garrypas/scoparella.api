@@ -57,8 +57,8 @@ resource "azurerm_key_vault_secret" "database_password" {
 }
 
 resource "random_password" "database_password" {
-  length = 12
-  special = true
+  length           = 12
+  special          = true
   override_special = "_%@"
 }
 

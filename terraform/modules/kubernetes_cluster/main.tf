@@ -13,7 +13,7 @@ resource "azurerm_kubernetes_cluster" "scoparella-kube" {
 
   default_node_pool {
     name       = "agentpool"
-    node_count = 2
+    node_count = 1
     vm_size    = "Standard_B2s"
   }
 

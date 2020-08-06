@@ -13,6 +13,10 @@ export class ConfigService {
           encoding: "utf-8",
         }),
       );
+      this.config.database.host =
+        process.env.DB_HOST ?? this.config.database.host;
+      this.config.database.port =
+        process.env.DB_PORT ?? this.config.database.port;
     }
     return Object.assign({}, this.config);
   }

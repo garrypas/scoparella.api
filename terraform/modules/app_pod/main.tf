@@ -1,6 +1,9 @@
 resource "kubernetes_pod" "scoparella-api" {
   metadata {
     name = "scoparella-api"
+    labels = {
+      "group" = "app"
+    }
   }
 
   spec {
@@ -11,6 +14,16 @@ resource "kubernetes_pod" "scoparella-api" {
       env {
         name  = "environment"
         value = var.environment
+      }
+
+      env {
+        name  = "DB_HOST"
+        value = var.sql_server_host
+      }
+
+      env {
+        name  = "DB_PORT"
+        value = var.sql_server_port
       }
 
       port {
@@ -51,7 +64,7 @@ resource "kubernetes_service" "scoparella-api-lb" {
   }
   spec {
     selector = {
-      App = kubernetes_pod.scoparella-api.metadata[0].labels.App
+      app = kubernetes_pod.scoparella-api.metadata.0.labels.group
     }
     port {
       port        = 80

@@ -3,8 +3,6 @@
   "database": {
     "name": "game",
     "connector": "mssql",
-    "host": "localhost",
-    "port": 1440,
     "user": "scoparella",
     "database": "scoparella",
     "schema": "scopa"

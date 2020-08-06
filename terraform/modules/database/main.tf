@@ -1,6 +1,6 @@
 data "azurerm_key_vault" "keyvault" {
-  name                        = "${var.environment}scoparellavault"
-  resource_group_name         = var.resource_group_name
+  name                = "${var.environment}scoparellavault"
+  resource_group_name = var.resource_group_name
 }
 
 data "azurerm_client_config" "current" {}
@@ -28,11 +28,11 @@ resource "azurerm_sql_server" "instance" {
 }
 
 resource "azurerm_storage_account" "account" {
-  name                        = "${var.environment}dbacc"
-  resource_group_name         = var.resource_group_name
-  location                    = var.location
-  account_tier                = "Standard"
-  account_replication_type    = "LRS"
+  name                     = "${var.environment}dbacc"
+  resource_group_name      = var.resource_group_name
+  location                 = var.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
 
   tags = {
     environment = var.environment
@@ -40,12 +40,16 @@ resource "azurerm_storage_account" "account" {
 }
 
 resource "azurerm_sql_database" "config" {
-  name                        = "${var.name}-config"
-  resource_group_name         = var.resource_group_name
-  location                    = var.location
-  server_name                 = azurerm_sql_server.instance.name
+  name                = "${var.name}-config"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  server_name         = azurerm_sql_server.instance.name
 
   tags = {
     environment = var.environment
   }
+}
+
+output "db_host" {
+  value = azurerm_sql_server.instance.fully_qualified_domain_name
 }
