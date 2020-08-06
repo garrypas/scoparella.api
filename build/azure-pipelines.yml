@@ -58,3 +58,9 @@ stages:
             Dockerfile: 'Dockerfile'
             tags: |
               scoparella_api
+        - script: |
+            cd terraform/preprod
+            terraform init
+            terraform plan
+            terraform apply -auto-approve
+          displayName: 'Terraform setup cloud resources'
