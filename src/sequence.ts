@@ -60,12 +60,18 @@ export class MySequence implements SequenceHandler {
       if (finished) return;
       const route = this.findRoute(request);
       const args = await this.parseParams(request, route);
-      this.logger.info("Bootstrapping authentication handler");
+      this.logger.trace("Bootstrapping authentication handler...");
       await this.authHandler.handle(route, request);
       await this.gameAuthorizationHandler.handle(route, request);
+      this.logger.trace("Bootstrapping authentication handler - done");
+
+      this.logger.trace("Invoke route...");
       const result = await this.invoke(route, args);
+      this.logger.trace("Invoked route.");
+
       this.send(response, result);
     } catch (err) {
+      this.logger.trace("Error caught in Sequence");
       this.logger.trace(err);
       if (err instanceof AuthorizationException) {
         (err as any).statusCode = 403;

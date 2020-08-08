@@ -15,7 +15,7 @@ resource "azurerm_sql_server" "instance" {
   resource_group_name          = var.resource_group_name
   location                     = var.location
   version                      = "12.0"
-  administrator_login          = "scoparella"
+  administrator_login          = "scoparella_admin"
   administrator_login_password = data.azurerm_key_vault_secret.database_password.value
 
   lifecycle {

@@ -5,12 +5,16 @@ export * from "./application";
 const logger = new ConsoleLogger();
 
 export async function main(options: ApplicationConfig = {}) {
+  logger.trace("Newing-up ScoparellaApiApplication");
   const app = new ScoparellaApiApplication(
     options,
     await SecretsService.getSecrets(),
   );
+  logger.trace("Booting ScoparellaApiApplication");
   await app.boot();
+  logger.trace("Starting ScoparellaApiApplication");
   await app.start();
+  logger.trace("ScoparellaApiApplication started");
 
   const url = app.restServer.url;
   logger.info(`Server is running at ${url}`);

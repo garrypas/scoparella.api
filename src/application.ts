@@ -29,37 +29,63 @@ export class ScoparellaApiApplication extends BootMixin(
 ) {
   constructor(options: ApplicationConfig = {}, private secrets: any) {
     super(options);
+    const logger = new ConsoleLogger();
+
+    logger.trace("Adding logging middleware...");
     this.bind("logging-middleware").toProvider(LoggingInterceptor);
+    logger.trace("Added logging middleware");
+
+    logger.trace("Setting up strategies IOC magic...");
     this.setupStrategies();
-    this.add(
-      createBindingFromClass(ConsoleLogger, {
-        key: "logger",
-      }),
-    );
+    logger.trace("Strategies IOC magic setup");
+
+    logger.trace("Adding logger singleton to IOC container...");
+    this.bind("logger").to(logger);
+    logger.trace("Adding logger to IOC container...");
+
+    // this.add(
+    //   createBindingFromClass(ConsoleLogger, {
+    //     key: "logger",
+    //   }),
+    // );
     this.add(
       createBindingFromClass(GameAuthorizationHandler, {
         key: "gameAuthorizationHandler",
       }),
     );
+    logger.trace("Adding secrets.json singleton to IOC container...");
     this.bind("secrets.json").to(secrets);
+    logger.trace("Added secrets.json");
+
+    logger.trace("Adding config.json singleton to IOC container...");
     this.bind("config.json").to(config);
+    logger.trace("Added config.json");
 
+    logger.trace("Setting up Sequence");
     this.sequence(MySequence);
+    logger.trace("Sequence was setup");
 
+    logger.trace("Setting up AuthenticationComponent");
     this.component(AuthenticationComponent);
+    logger.trace("AuthenticationComponent was setup");
+
+    logger.trace("Setting up Passport serializers");
     passport.serializeUser(function (user: any, done) {
       done(null, user);
     });
     passport.deserializeUser(function (user: any, done) {
       done(null, user);
     });
+    logger.trace("Passport serializers setup");
 
     this.static("/", path.join(__dirname, "../public"));
 
+    logger.trace("Swagger bits...");
     this.configure(RestExplorerBindings.COMPONENT).to({
       path: "/explorer",
     });
     this.component(RestExplorerComponent);
+    logger.trace("Swagger bits setup");
 
     this.projectRoot = __dirname;
     this.bootOptions = {

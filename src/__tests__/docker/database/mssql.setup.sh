@@ -21,4 +21,4 @@ setup_database() {
   /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "$SA_PASSWORD" -i "/start/sql-scripts/create-database.sql"
 }
 
-setup_database & run_mssql
+setup_database & /opt/mssql/bin/sqlservr

@@ -11,10 +11,11 @@ services:
       - "LOG_LEVEL=info"
       - "TEST=1"
       - "HOST=0.0.0.0"
-      - "DB_HOST=${SCOPARELLA_DB_IP}"
+      - "DB_HOST=scoparella_db"
       - "DB_PORT=1433"
     networks:
       - scoparella_net
+    hostname: scoparellaapp.local
 
 networks:
   scoparella_net:

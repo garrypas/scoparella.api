@@ -6,15 +6,23 @@ A Loopback API wrapper around the [Scoparella Engine](https://github.com/garrypa
 
 The library uses third-party OAuth2 providers to authenticate users before allowing them to take part in games.
 
-Before running the app you will need to create a public/private key pair using the `create-keys.sh` (will eventually productionise this process).
+The application includes bespoke Terraform scripts targeting Azure Kubernetes Service (AKS) with an MS SQL back-end.
 
 ## Tests
 
 ### In-place
 
+1. Ensure the dockerise MS SQL database is up, and give it around 10 seconds to warm up.
+1. Run the tests `npm run test:only` - this will runs tests with no clean or build.
+
 ### Standard
 
+1. Ensure the dockerise MS SQL database is up, and give it around 10 seconds to warm up.
+1. Run the tests `npm t`
+
 ### Inside Docker network
+
+1. Run `npm run test:docker` - this will spin-up MS SQL and the App inside a docker network and run the tests within a container. It's a chance to test how the app runs once it has been rolled into a Docker image.
 
 ## Logging
 
@@ -23,3 +31,5 @@ Logging is set to "warn" by default. For more verbose logging set the environmen
 `LOG_LEVEL=info npm run start`
 
 Options are `trace`, `info`, `warn` or `error`.
+
+`trace` is very noisy and is used for local debugging, so is `info` to a lesser extent. In a production setting we'd set this to `warn`.

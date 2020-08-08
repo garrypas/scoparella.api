@@ -7,10 +7,6 @@
     "database": "scoparella",
     "schema": "scopa"
   },
-  "keys": {
-    "publicKey": "./RS512.key.pub",
-    "privateKey": "./RS512.key"
-  },
   "thirdPartyConfig": {
     "google": {
       "provider": "google",

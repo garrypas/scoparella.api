@@ -1,19 +1,31 @@
-CREATE DATABASE scoparella
+-- Idempotent script for the scoparella database
+
+if not exists(select top 1
+  *
+from sys.databases
+where name ='scoparella')
+  CREATE DATABASE scoparella
 GO
 
 USE scoparella
 GO
 
-CREATE SCHEMA [scopa]
+if not exists(select top 1
+  *
+from sys.schemas
+where name ='scopa')
+  EXEC('CREATE SCHEMA scopa')
 GO
 
-CREATE TABLE [scopa].[statuses]
+IF OBJECT_ID('scopa.statuses', 'U') IS NULL
+  CREATE TABLE [scopa].[statuses]
 (
   [id] NVARCHAR(32) PRIMARY KEY NOT NULL
 )
-GO
+  GO
 
-CREATE TABLE [scopa].[games]
+IF OBJECT_ID('scopa.games', 'U') IS NULL
+  CREATE TABLE [scopa].[games]
 (
   [id] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID() PRIMARY KEY,
   [player1] NVARCHAR(64) DEFAULT NULL,
@@ -24,22 +36,44 @@ CREATE TABLE [scopa].[games]
   [lastUpdate] DATETIME2 NOT NULL,
   [statusId] NVARCHAR(32) NOT NULL FOREIGN KEY REFERENCES [scopa].[statuses]([id])
 )
-GO
+  GO
 
 -- Populate meta data tables
-INSERT [scopa].[statuses]
+IF NOT EXISTS (select top 1
+  *
+from scopa.statuses
+where id = 'waiting') INSERT [scopa].[statuses]
   (id)
 VALUES
-  ('waiting'),
-  ('inProgress'),
-  ('completed'),
+  ('waiting')
+IF NOT EXISTS (select top 1
+  *
+from scopa.statuses
+where id = 'inProgress') INSERT [scopa].[statuses]
+  (id)
+VALUES
+  ('inProgress')
+IF NOT EXISTS (select top 1
+  *
+from scopa.statuses
+where id = 'completed') INSERT [scopa].[statuses]
+  (id)
+VALUES
+  ('completed')
+IF NOT EXISTS (select top 1
+  *
+from scopa.statuses
+where id = 'cancelled') INSERT [scopa].[statuses]
+  (id)
+VALUES
   ('cancelled')
 
-CREATE LOGIN scoparella WITH PASSWORD = 'P@ss55w0rd'
-GO
-
-CREATE USER scoparella FROM login scoparella
-GO
-
-GRANT SELECT, INSERT, UPDATE ON SCHEMA :: scopa TO scoparella
+if not exists (select top 1
+  *
+from sys.syslogins
+where name = 'scoparella') begin
+  CREATE LOGIN scoparella WITH PASSWORD = 'P@ss55w0rd'
+  CREATE USER scoparella FROM login scoparella
+  GRANT SELECT, INSERT, UPDATE ON SCHEMA :: scopa TO scoparella
+end
 GO
