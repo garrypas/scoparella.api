@@ -15,8 +15,9 @@ export class ConfigService {
       );
       this.config.database.host =
         process.env.DB_HOST ?? this.config.database.host;
-      this.config.database.port =
-        process.env.DB_PORT ?? this.config.database.port;
+      this.config.database.port = +(
+        process.env.DB_PORT ?? this.config.database.port
+      );
     }
     return Object.assign({}, this.config);
   }

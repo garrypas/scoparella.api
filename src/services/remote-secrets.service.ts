@@ -18,6 +18,7 @@ type TokenResponse = {
 
 export class RemoteSecretService {
   static async getSecrets(): Promise<any> {
+    const logger = new ConsoleLogger();
     if (process.env.TEST) {
       const config = ConfigService.getConfig();
       return {
@@ -40,6 +41,7 @@ export class RemoteSecretService {
     }
     let token: TokenResponse;
     try {
+      logger.info("Making call to the remote secret store");
       token = await get(
         "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net",
         {
@@ -49,7 +51,7 @@ export class RemoteSecretService {
         },
       );
     } catch (e) {
-      new ConsoleLogger().error(e);
+      logger.error(e);
       throw e;
     }
 

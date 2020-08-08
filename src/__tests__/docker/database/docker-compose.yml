@@ -1,6 +1,7 @@
-version: "3"
+version: "3.5"
 services:
   scoparella-db:
+    container_name: scoparella_db
     image: microsoft/mssql-server-linux:latest
     ports:
       - "1440:1433"
@@ -18,4 +19,5 @@ services:
 
 networks:
   scoparella_net:
-    external: true
+    external: false
+    name: scoparella_net

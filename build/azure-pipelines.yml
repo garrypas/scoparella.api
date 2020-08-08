@@ -26,7 +26,7 @@ stages:
           # There is a terraform task available in Devops, we should probably use that instead...
         - script: |
             wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
-            unzip terraform_0.12.24_linux_amd64.zip
+            unzip terraform_0.12.29_linux_amd64.zip
             mv terraform ~/bin
             cd ./terraform/preprod_init && terraform init && terraform plan && terraform apply -auto-approve
           displayName: 'Terraform'

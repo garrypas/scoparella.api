@@ -1,0 +1,22 @@
+version: "3.5"
+services:
+  scoparella_app:
+    container_name: scoparella_api
+    build: "../../../../"
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    environment:
+      - "LOG_LEVEL=info"
+      - "TEST=1"
+      - "HOST=0.0.0.0"
+      - "DB_HOST=${SCOPARELLA_DB_IP}"
+      - "DB_PORT=1433"
+    networks:
+      - scoparella_net
+
+networks:
+  scoparella_net:
+    external: true
+    name: scoparella_net

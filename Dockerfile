@@ -14,5 +14,5 @@ CMD [ "node", "." ]
 
 # To test
 # docker network create scoparella_net
-# docker build -t scoparella_api --network=scoparella_net .
-# dockers run --network=scoparella_net -p 3000:3000 -e SQL_HOST=172.19.0.2 -e SQL_PASSWORD='P@ss55w0rd' -e HOST=0.0.0.0 -e SQL_PORT=1433 scoparella_api
+# sudo docker container stop scoparella_api | docker container rm scoparella_api | docker build -t scoparella_api --network=docker_scoparella_net .
+# dockers run --network=docker_scoparella_net --name scoparella_api -p 3000:3000 -e LOG_LEVEL=info -e TEST=1 -e HOST=0.0.0.0 -e DB_HOST=172.20.0.2 -e DB_PORT=1433 scoparella_api

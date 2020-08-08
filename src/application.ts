@@ -24,10 +24,6 @@ import {MySequence} from "./sequence";
 import {ConfigService} from "./services";
 export {ApplicationConfig};
 const config = ConfigService.getConfig();
-const thirdPartyConfig: Record<
-  string,
-  object
-> = require("./third-party-config.json");
 export class ScoparellaApiApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
@@ -81,15 +77,19 @@ export class ScoparellaApiApplication extends BootMixin(
   }
 
   private setupStrategies() {
-    const googleOptions = thirdPartyConfig["google"] as GoogleStrategyOptions;
-    googleOptions.clientSecret = this.secrets.google.clientSecret;
+    const googleOptions = Object.assign(
+      {},
+      config.thirdPartyConfig.google,
+      this.secrets.google,
+    ) as GoogleStrategyOptions;
 
-    const facebookOptions = thirdPartyConfig[
-      "facebook"
-    ] as FacebookStrategyOption;
-    facebookOptions.clientSecret = this.secrets.facebook.clientSecret;
+    const facebookOptions = Object.assign(
+      {},
+      config.thirdPartyConfig.facebook,
+      this.secrets.facebook,
+    ) as FacebookStrategyOption;
 
-    const jwtOptions = thirdPartyConfig["jwt"] as JwtOptions;
+    const jwtOptions = config.thirdPartyConfig.jwt as JwtOptions;
     jwtOptions.secretOrKey = this.secrets.publicKey;
     jwtOptions.privateKey = this.secrets.privateKey;
 
