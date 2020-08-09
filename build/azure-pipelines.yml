@@ -59,7 +59,7 @@ stages:
             tags: |
               scoparella_api
         - script: |
-            cd terraform/preprod
+            cd resources/preprod
             terraform init
             terraform plan
             terraform apply -auto-approve
