@@ -56,7 +56,23 @@ resource "azurerm_key_vault_secret" "database_password" {
   }
 }
 
+resource "azurerm_key_vault_secret" "database_app_password" {
+  name         = "dbapppassword"
+  value        = random_password.database_app_password.result
+  key_vault_id = azurerm_key_vault.keyvault.id
+
+  tags = {
+    environment = var.environment
+  }
+}
+
 resource "random_password" "database_password" {
+  length           = 12
+  special          = true
+  override_special = "_%@"
+}
+
+resource "random_password" "database_app_password" {
   length           = 12
   special          = true
   override_special = "_%@"
@@ -80,4 +96,8 @@ resource "azurerm_key_vault_secret" "privkey" {
   tags = {
     environment = var.environment
   }
+}
+
+output "database_password" {
+  value = random_password.database_password.result
 }

@@ -12,3 +12,12 @@ module "vault" {
   location            = var.location
   resource_group_name = module.resource_group.name
 }
+
+module "database" {
+  source              = "../database"
+  name                = "${var.environment}-${var.name}-database"
+  environment         = var.environment
+  location            = var.location
+  resource_group_name = module.resource_group.name
+  database_password   = module.vault.database_password
+}

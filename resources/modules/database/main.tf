@@ -1,14 +1,4 @@
-data "azurerm_key_vault" "keyvault" {
-  name                = "${var.environment}scoparellavault"
-  resource_group_name = var.resource_group_name
-}
-
 data "azurerm_client_config" "current" {}
-
-data "azurerm_key_vault_secret" "database_password" {
-  name         = "dbpassword"
-  key_vault_id = data.azurerm_key_vault.keyvault.id
-}
 
 resource "azurerm_sql_server" "instance" {
   name                         = "${var.name}-instance"
@@ -16,7 +6,7 @@ resource "azurerm_sql_server" "instance" {
   location                     = var.location
   version                      = "12.0"
   administrator_login          = "scoparella_admin"
-  administrator_login_password = data.azurerm_key_vault_secret.database_password.value
+  administrator_login_password = var.database_password
 
   lifecycle {
     prevent_destroy = true
@@ -39,8 +29,8 @@ resource "azurerm_sql_server" "instance" {
 #   }
 # }
 
-resource "azurerm_sql_database" "config" {
-  name                = "${var.name}-config"
+resource "azurerm_sql_database" "database" {
+  name                = "scoparella"
   resource_group_name = var.resource_group_name
   location            = var.location
   server_name         = azurerm_sql_server.instance.name
@@ -50,6 +40,22 @@ resource "azurerm_sql_database" "config" {
   }
 }
 
-output "db_host" {
-  value = azurerm_sql_server.instance.fully_qualified_domain_name
+resource "azurerm_sql_firewall_rule" "example" {
+  name                = "sql-open-to-azure"
+  resource_group_name = var.resource_group_name
+  server_name         = azurerm_sql_server.instance.name
+  # Allow Azure services and resources to access this server
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
+}
+
+# Ensure there is an application-level login ready when the app comes up
+resource "null_resource" "setup-database" {
+  provisioner "local-exec" {
+    command = <<EOF
+pushd ./../modules/database
+ENV="${var.environment}" bash ./setup-database.sh
+popd
+    EOF
+  }
 }
