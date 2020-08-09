@@ -32,6 +32,7 @@ stages:
               workingDirectory: 'resources/preprod_init'
               useGlobalConfig: true
               addSpnToEnvironment: true
+              azureSubscription: '009e0a99-8c4c-49fb-8efb-e79bdaeb58d0'
               inlineScript: |
                 wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
                 unzip terraform_0.12.29_linux_amd64.zip
