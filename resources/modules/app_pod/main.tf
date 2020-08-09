@@ -1,3 +1,9 @@
+data "azurerm_sql_server" "instance" {
+  name                = "${var.environment}-${var.name}-database-instance"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+}
+
 resource "kubernetes_pod" "scoparella-api" {
   metadata {
     name = "scoparella-api"
@@ -18,7 +24,7 @@ resource "kubernetes_pod" "scoparella-api" {
 
       env {
         name  = "DB_HOST"
-        value = var.sql_server_host
+        value = data.azurerm_sql_server.instance.fqdn
       }
 
       env {

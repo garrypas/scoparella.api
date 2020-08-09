@@ -12,7 +12,6 @@ module "cluster" {
 #   environment         = var.environment
 #   location            = var.location
 #   resource_group_name = local.resource_group_name
-#   sql_server_host     = module.database.db_host
 #   sql_server_port     = 1433
 # }
 
