@@ -1,11 +1,11 @@
-trigger:
-  branches:
-    include:
-      - master
-  paths:
-    exclude:
-      - documentation/*
-      - README.md
+# trigger:
+  # branches:
+  #   include:
+  #     - master
+  # paths:
+  #   exclude:
+  #     - documentation/*
+  #     - README.md
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -23,16 +23,22 @@ stages:
       - job: "Initial_Setup"
         condition: eq('${{ parameters.stage }}', 'preprod_init')
         steps:
+
+          - task: AzureCLI@2
+            displayName: "Terraform"
+            inputs:
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              workingDirectory: 'resources/preprod_init'
+              inlineScript: |
+                wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
+                unzip terraform_0.12.29_linux_amd64.zip
+                mv terraform ~/bin
+                terraform init
+                terraform plan
+                terraform apply -auto-approve
           # There is a terraform task available in Devops, we should probably use that instead...
-        - script: |
-            wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
-            unzip terraform_0.12.29_linux_amd64.zip
-            mv terraform ~/bin
-            cd ./resources/preprod_init && terraform init && terraform plan && terraform apply -auto-approve
-          displayName: 'Terraform'
-        - script: |
-            bash ./create-keys.sh
-          displayName: 'Create Keys'
+
       - job: "Build"
         condition: eq('${{ parameters.stage }}', 'preprod')
         steps:
