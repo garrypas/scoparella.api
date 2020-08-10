@@ -39,9 +39,6 @@ stages:
                 terraform plan
                 terraform apply -auto-approve
                 cd ../..
-
-                ENV=preprod bash ./resources/modules/jwks/create-keys.sh
-
       - job: "Build"
         condition: eq('${{ parameters.stage }}', 'preprod')
         steps:

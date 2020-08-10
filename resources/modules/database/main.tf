@@ -54,7 +54,7 @@ resource "null_resource" "setup-database" {
   provisioner "local-exec" {
     command = <<EOF
 ENV="${var.environment}"
-MODULE_PATH=${path.module}
+MODULE_PATH="${path.module}"
 ${file("${path.module}/setup-database.sh")}
     EOF
   }
