@@ -24,7 +24,7 @@
     "pretest": "npm run clean && npm run build",
     "test:only": "cross-env TEST=1 lb-mocha --allow-console-logs \"dist/__tests__\"",
     "test": "npm run lint:fix && npm run test:only",
-    "test:docker": "npm run docker:app && docker exec -it scoparella_api /bin/sh -c \"npm run test:lb\"",
+    "test:docker": "npm run docker:app && docker exec scoparella_api /bin/sh -c \"npm run test:lb\"",
     "posttest:docker": "npm run docker:app:down",
     "migrate": "node ./dist/migrate",
     "openapi-spec": "node ./dist/openapi-spec",
