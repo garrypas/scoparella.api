@@ -21,3 +21,8 @@ module "database" {
   resource_group_name = module.resource_group.name
   database_password   = module.vault.database_password
 }
+
+module "jwks" {
+  source      = "../jwks"
+  environment = var.environment
+}
