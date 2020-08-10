@@ -53,9 +53,9 @@ resource "azurerm_sql_firewall_rule" "example" {
 resource "null_resource" "setup-database" {
   provisioner "local-exec" {
     command = <<EOF
-pushd ./../modules/database
-ENV="${var.environment}" bash ./setup-database.sh
-popd
+ENV="${var.environment}"
+MODULE_PATH=${path.module}
+${file("${path.module}/setup-database.sh")}
     EOF
   }
 }
