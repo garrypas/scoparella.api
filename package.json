@@ -30,7 +30,6 @@
     "openapi-spec": "node ./dist/openapi-spec",
     "prestart": "npm run build",
     "start": "node -r source-map-support/register .",
-    "start:dev": "bash create-keys.sh && npm run start",
     "predocker:app": "npm run docker:app:down",
     "docker:app": "npm run docker:deps && sleep 20 && docker-compose -f src/__tests__/docker/app/docker-compose.yml up -d && sleep 5",
     "docker:app:down": "docker-compose -f src/__tests__/docker/app/docker-compose.yml down | npm run docker:deps:down",
