@@ -23,24 +23,16 @@ stages:
       - job: "Initial_Setup"
         condition: eq('${{ parameters.stage }}', 'preprod_init')
         steps:
-
-          - task: AzureCLI@2
-            displayName: "Seed resources (one-time setup)"
+          - task: Bash@3
             inputs:
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              workingDirectory: 'resources/preprod_init'
-              useGlobalConfig: true
-              addSpnToEnvironment: true
-              azureSubscription: 'DevopsConnection'
-              inlineScript: |
+              targetType: 'inline'
+              script: |
+                az login -u $AZURE_USERNAME -p $AZURE_PASSWORD
+                az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
+
                 wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
                 unzip terraform_0.12.29_linux_amd64.zip
                 mv terraform ~/bin
-
-                ARM_TENANT_ID=$tenantId
-                ARM_CLIENT_ID=$servicePrincipalId
-                ARM_CLIENT_SECRET=$servicePrincipalKey
 
                 terraform init
                 terraform plan
