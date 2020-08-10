@@ -1,12 +1,12 @@
 #!/bin/bash
 PASSWORD=$(az keyvault secret show --vault-name="${ENV}scoparellavault" --name=dbpassword -o tsv --query value)
 APP_PASSWORD=$(az keyvault secret show --vault-name="${ENV}scoparellavault" --name=dbapppassword -o tsv --query value)
-if [[ -z "${MODULE_PATH}" ]]
+
+if [ ! -z "${MODULE_PATH}" ]
 then
-      MODULE_PATH="."
-      APP_PASSWORD="Xy"
+  echo "MODULE_PATH SET TO $MODULE_PATH"
 else
-      echo "MODULE_PATH SET TO $MODULE_PATH"
+  MODULE_PATH="."
 fi
 echo "Insert password for placeholder..."
 sed -i'' -e "s|<PASSWORD>|$APP_PASSWORD|g" "$MODULE_PATH/setup-database.sql"
