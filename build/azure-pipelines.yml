@@ -18,7 +18,7 @@ parameters:
     - preprod
 variables:
   - name: env
-    value: replace(parameters.stage, '_init', '')
+    value: ${{ replace(parameters.stage, '_init', '') }}
 
 stages:
   - stage: preprod
