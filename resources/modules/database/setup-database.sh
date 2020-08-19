@@ -5,7 +5,7 @@ APP_PASSWORD=$(az keyvault secret show --vault-name="${ENV}scoparellavault" --na
 
 if [ ! -z "${MODULE_PATH}" ]
 then
-  echo "MODULE_PATH SET TO $MODULE_PATH"
+  echo "MODULE_PATH set to $MODULE_PATH"
 else
   MODULE_PATH="."
 fi

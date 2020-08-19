@@ -90,6 +90,6 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              ENV="${{ variables.env }}" bash ./apply-database-objects.sh
+              MODULE_PATH="." ENV="${{ variables.env }}" bash ./apply-database-objects.sh
             workingDirectory: "./resources/modules/database_update"
           displayName: "Apply database objects"
