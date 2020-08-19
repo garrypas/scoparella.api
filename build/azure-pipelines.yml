@@ -16,12 +16,15 @@ parameters:
   values:
     - preprod_init
     - preprod
+variables:
+  - name: env
+    value: replace(parameters.stage, '_init', '')
 
 stages:
   - stage: preprod
     jobs:
       - job: "Initial_Setup"
-        condition: eq('${{ parameters.stage }}', 'preprod_init')
+        condition: contains('${{ parameters.stage }}', '_init')
         steps:
           - task: Bash@3
             inputs:
@@ -44,12 +47,12 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                MODULE_PATH="." ENV="${{ parameters.stage }}" bash ./setup-database.sh
+                MODULE_PATH="." ENV="${{ variables.env }}" bash ./setup-database.sh
               workingDirectory: "./resources/modules/database"
             displayName: "Scaffold database"
 
       - job: "Build"
-        condition: eq('${{ parameters.stage }}', 'preprod')
+        condition: not(contains('${{ parameters.stage }}', '_init'))
         steps:
         - task: NodeTool@0
           inputs:
