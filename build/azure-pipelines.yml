@@ -16,8 +16,10 @@ parameters:
   values:
     - preprod_init
     - preprod
+- name: task
+  default: "*"
+
 variables:
-  task: "*"
   env: ${{ replace(parameters.stage, '_init', '') }}
 
 stages:
@@ -27,7 +29,7 @@ stages:
         condition: contains('${{ parameters.stage }}', '_init')
         steps:
           - task: Bash@3
-            condition: or( eq(variables.task, '*'), eq(variables.task, 'terraform') )
+            condition: or( eq(parameters.task, '*'), eq(parameters.task, 'terraform') )
             inputs:
               targetType: 'inline'
               script: |
@@ -44,7 +46,7 @@ stages:
               workingDirectory: "./resources/${{ parameters.stage }}"
             displayName: "Terraform data/secrets"
           - task: Bash@3
-            condition: or( eq(variables.task, '*'), eq(variables.task, 'database') )
+            condition: or( eq(parameters.task, '*'), eq(parameters.task, 'database') )
             inputs:
               targetType: 'inline'
               script: |
@@ -58,16 +60,16 @@ stages:
         - task: NodeTool@0
           inputs:
             versionSpec: '12.x'
-          condition: or( eq(variables.task, '*'), eq(variables.task, 'test'), eq(variables.task, 'npm') )
+          condition: or( eq(parameters.task, '*'), eq(parameters.task, 'test'), eq(parameters.task, 'npm') )
         - script: |
             npm i && npm run build
           displayName: 'NPM install and build'
-          condition: or( eq(variables.task, '*'), eq(variables.task, 'test'), eq(variables.task, 'npm') )
+          condition: or( eq(parameters.task, '*'), eq(parameters.task, 'test'), eq(parameters.task, 'npm') )
 
         - script: |
             npm run test:docker
           displayName: 'Run tests'
-          condition: or( eq(variables.task, '*'), eq(variables.task, 'test') )
+          condition: or( eq(parameters.task, '*'), eq(parameters.task, 'test') )
 
         - task: Docker@2
           displayName: Build and Push
@@ -78,7 +80,7 @@ stages:
             Dockerfile: 'Dockerfile'
             tags: |
               scoparella_api
-          condition: or( eq(variables.task, '*'), eq(variables.task, 'docker') )
+          condition: or( eq(parameters.task, '*'), eq(parameters.task, 'docker') )
 
         - script: |
             az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
@@ -94,7 +96,7 @@ stages:
             terraform apply -auto-approve
           workingDirectory: "./resources/${{ parameters.stage }}"
           displayName: 'Terraform setup cloud resources'
-          condition: or( eq(variables.task, '*'), eq(variables.task, 'terraform') )
+          condition: or( eq(parameters.task, '*'), eq(parameters.task, 'terraform') )
 
         - task: Bash@3
           inputs:
@@ -103,4 +105,4 @@ stages:
               MODULE_PATH="." ENV="${{ variables.env }}" bash ./apply-database-objects.sh
             workingDirectory: "./resources/modules/database_update"
           displayName: "Apply database objects"
-          condition: or( eq(variables.task, '*'), eq(variables.task, 'database') )
+          condition: or( eq(parameters.task, '*'), eq(parameters.task, 'database') )
