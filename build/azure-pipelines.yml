@@ -34,18 +34,17 @@ stages:
                 unzip terraform_0.12.29_linux_amd64.zip
                 mv terraform ~/bin
 
-                cd ./resources/preprod_init
                 terraform init
                 terraform plan
                 terraform apply -auto-approve
-                cd ../..
+              workingDirectory: "./resources/preprod_init"
             displayName: "Terraform data/secrets"
 
           - task: Bash@3
             inputs:
               targetType: 'inline'
               script: |
-                MODULE_PATH="./" ENV="${{ parameters.stage }}" bash ./setup-database.sh
+                MODULE_PATH="." ENV="${{ parameters.stage }}" bash ./setup-database.sh
               workingDirectory: "./resources/modules/database"
             displayName: "Scaffold database"
 
@@ -82,4 +81,5 @@ stages:
             terraform init
             terraform plan
             terraform apply -auto-approve
+          workingDirectory: "./resources/preprod"
           displayName: 'Terraform setup cloud resources'
