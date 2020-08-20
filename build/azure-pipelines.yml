@@ -28,39 +28,48 @@ stages:
       - job: "Initial_Setup"
         condition: contains('${{ parameters.stage }}', '_init')
         steps:
-          - task: Bash@3
-            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
-            inputs:
-              targetType: 'inline'
-              script: |
-                az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
-                az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
+        - script: |
+            az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
+            az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
+          displayName: "Azure login"
 
-                wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
-                unzip terraform_0.12.29_linux_amd64.zip
-                mv terraform ~/bin
+        - task: Bash@3
+          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
+          inputs:
+            targetType: 'inline'
+            script: |
+              wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
+              unzip terraform_0.12.29_linux_amd64.zip
+              mv terraform ~/bin
 
-                terraform init
-                terraform plan
-                terraform apply -auto-approve
-              workingDirectory: "./resources/${{ parameters.stage }}"
-            displayName: "Terraform data/secrets"
-          - task: Bash@3
-            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'database') )
-            inputs:
-              targetType: 'inline'
-              script: |
-                MODULE_PATH="." ENV="${{ variables.env }}" bash ./setup-database.sh
-              workingDirectory: "./resources/modules/database"
-            displayName: "Scaffold database"
+              terraform init
+              terraform plan
+              terraform apply -auto-approve
+            workingDirectory: "./resources/${{ parameters.stage }}"
+          displayName: "Terraform data/secrets"
+
+        - task: Bash@3
+          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'database') )
+          inputs:
+            targetType: 'inline'
+            script: |
+              MODULE_PATH="." ENV="${{ variables.env }}" bash ./setup-database.sh
+            workingDirectory: "./resources/modules/database"
+          displayName: "Scaffold database"
 
       - job: "Build"
         condition: not(contains('${{ parameters.stage }}', '_init'))
         steps:
+        - script: |
+            az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
+            az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
+          displayName: "Azure login"
+
         - task: NodeTool@0
           inputs:
             versionSpec: '12.x'
           condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'test'), eq('${{ parameters.task }}', 'npm') )
+
         - script: |
             npm i && npm run build
           displayName: 'NPM install and build'
@@ -83,9 +92,6 @@ stages:
           condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'docker') )
 
         - script: |
-            az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
-            az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
-
             wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
             unzip terraform_0.12.29_linux_amd64.zip
             mv terraform ~/bin
