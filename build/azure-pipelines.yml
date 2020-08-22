@@ -18,6 +18,12 @@ parameters:
     - preprod
 - name: task
   default: "*"
+  values:
+    - "*"
+    - docker
+    - terraform
+    - database
+    - test
 
 variables:
   env: ${{ replace(parameters.stage, '_init', '') }}
