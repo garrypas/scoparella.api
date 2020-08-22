@@ -5,6 +5,7 @@ import {get as http_get, RequestOptions as http_options} from "http";
 import {get as https_get, RequestOptions as https_options} from "https";
 import {ConfigService} from ".";
 import {ConsoleLogger} from "../Logger";
+const logger = new ConsoleLogger();
 
 type TokenResponse = {
   access_token: string;
@@ -18,7 +19,6 @@ type TokenResponse = {
 
 export class RemoteSecretService {
   static async getSecrets(): Promise<any> {
-    const logger = new ConsoleLogger();
     if (process.env.TEST) {
       const config = ConfigService.getConfig();
       return {
@@ -73,15 +73,20 @@ export class RemoteSecretService {
   }
 }
 
+// curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -H Metadata:true -s
+// BEARER="access token"
+// curl https://preprodscoparellavault.vault.azure.net/secrets/public-key/?api-version=7.0 -H "Authorization: Bearer $BEARER"
+
 async function requestSecret(secret: string, token: TokenResponse) {
   const uri = `https://preprodscoparellavault.vault.azure.net/secrets/${secret}/?api-version=7.0`;
   return get(uri, {
     headers: {
       Authorization: `${token.token_type} ${token.access_token}`,
     },
-  });
+  })
+    .then(() => logger.info(`Retrieved secret ${secret}`))
+    .catch(err => logger.error(`Failed to get secret '${secret} - ${err}'`));
 }
-
 async function get(
   url: string,
   options: http_options | https_options,
@@ -91,7 +96,7 @@ async function get(
     getter(url, options, function (res) {
       const statusCode = res.statusCode;
       if (!statusCode || statusCode >= 300) {
-        return reject(`Failed with status code ${statusCode}`);
+        return reject(`Failed to get secret with status code ${statusCode}`);
       }
       res.setEncoding("utf8");
       let rawData = "";
