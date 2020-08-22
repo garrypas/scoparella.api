@@ -1,6 +1,5 @@
 data "azurerm_sql_server" "instance" {
-  name                = "${var.environment}-${var.name}-database-instance"
-  location            = var.location
+  name                = "${var.environment}-scoparella-database-instance"
   resource_group_name = var.resource_group_name
 }
 
@@ -16,6 +15,16 @@ resource "kubernetes_pod" "scoparella-api" {
     container {
       image = "garrypassarella/scoparella:tagname"
       name  = "scoparella-api"
+
+      env {
+        name  = "HOST"
+        value = "0.0.0.0"
+      }
+
+      env {
+        name  = "LOG_LEVEL"
+        value = "info"
+      }
 
       env {
         name  = "environment"
@@ -42,7 +51,7 @@ resource "kubernetes_pod" "scoparella-api" {
           port = 3000
         }
 
-        initial_delay_seconds = 3
+        initial_delay_seconds = 300
         period_seconds        = 3
       }
     }
@@ -74,7 +83,7 @@ resource "kubernetes_service" "scoparella-api-lb" {
     }
     port {
       port        = 80
-      target_port = 80
+      target_port = 3000
     }
 
     type = "LoadBalancer"

@@ -18,7 +18,7 @@ resource "azurerm_user_assigned_identity" "preprodkubepod" {
 }
 
 resource "azurerm_role_assignment" "preprodkubepod" {
-  name                 = "3CC708CD-07C3-4913-B4DD-D0372F4526DC"
+  name                 = "3cc708cd-07c3-4913-b4dd-d0372f4526dc"
   principal_id         = azurerm_user_assigned_identity.preprodkubepod.principal_id
   role_definition_name = "Reader"
   scope                = data.azurerm_subscription.current.id

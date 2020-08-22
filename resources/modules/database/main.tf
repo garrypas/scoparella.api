@@ -34,6 +34,7 @@ resource "azurerm_sql_database" "database" {
   resource_group_name = var.resource_group_name
   location            = var.location
   server_name         = azurerm_sql_server.instance.name
+  edition             = "Free"
 
   tags = {
     environment = var.environment
