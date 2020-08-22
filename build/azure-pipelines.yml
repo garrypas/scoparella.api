@@ -89,6 +89,7 @@ stages:
             Dockerfile: 'Dockerfile'
             tags: |
               scoparella_api
+              ${{ parameters.stage }}
           condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'docker') )
 
         - script: |
