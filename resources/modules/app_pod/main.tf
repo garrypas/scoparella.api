@@ -13,7 +13,7 @@ resource "kubernetes_pod" "scoparella-api" {
 
   spec {
     container {
-      image = "garrypassarella/scoparella:tagname"
+      image = "garrypassarella/scoparella:scoparella_api_${var.environment}"
       name  = "scoparella-api"
 
       env {

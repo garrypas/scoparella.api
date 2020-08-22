@@ -88,8 +88,7 @@ stages:
             command: 'buildAndPush'
             Dockerfile: 'Dockerfile'
             tags: |
-              scoparella_api
-              ${{ parameters.stage }}
+              scoparella_api_${{ variables.env }}
           condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'docker') )
 
         - script: |
