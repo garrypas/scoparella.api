@@ -3,17 +3,12 @@ data "azurerm_sql_server" "instance" {
   resource_group_name = var.resource_group_name
 }
 
-resource "azurerm_user_assigned_identity" "preprodkubepod" {
-  resource_group_name = var.resource_group_name
-  name                = "preprodkubepod"
-}
-
 resource "kubernetes_pod" "scoparella-api" {
   metadata {
     name = "scoparella-api"
     labels = {
       "group"           = "app"
-      "aadpodidbinding" = data.azurerm_user_assigned_identity.preprodkubepod.name
+      "aadpodidbinding" = "${var.environment}kubepod"
     }
   }
 

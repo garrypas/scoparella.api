@@ -1,60 +1,58 @@
 // Main pods depend on this having happened.
 data "azurerm_subscription" "current" {}
-
-resource "null_resource" "identity-pod-deploy" {
-  provisioner "local-exec" {
-    command = <<EOF
-      kubectl apply -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment.yaml
-      kubectl apply -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/mic-exception.yaml
-    EOF
-  }
-}
+data "azurerm_client_config" "current" {}
 
 resource "azurerm_user_assigned_identity" "preprodkubepod" {
   resource_group_name = var.resource_group_name
   location            = var.location
   name                = "preprodkubepod"
-  depends_on          = [null_resource.identity-pod-deploy]
+}
+
+data "azurerm_key_vault" "keyvault" {
+  name                = "${var.environment}scoparellavault"
+  resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_key_vault_access_policy" "identity-pod" {
+  key_vault_id = data.azurerm_key_vault.keyvault.id
+
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = azurerm_user_assigned_identity.preprodkubepod.principal_id
+
+  key_permissions = [
+    "get", "list"
+  ]
+
+  secret_permissions = [
+    "get", "list"
+  ]
 }
 
 resource "azurerm_role_assignment" "preprodkubepod" {
-  name                 = "3cc708cd-07c3-4913-b4dd-d0372f4526dc"
+  name                 = var.environment == "preprod" ? "3cc708cd-07c3-4913-b4dd-d0372f4526dc" : "4dd819de-18d4-5a24-c5ee-e148305637ed"
   principal_id         = azurerm_user_assigned_identity.preprodkubepod.principal_id
   role_definition_name = "Reader"
-  scope                = data.azurerm_subscription.current.id
+  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}"
 }
 
-resource "null_resource" "identity-pod-add-identity" {
-  depends_on = [azurerm_user_assigned_identity.preprodkubepod]
-  provisioner "local-exec" {
-    command = <<EOF
-cat << ${local.eof} | kubectl apply -f -
-apiVersion: "aadpodidentity.k8s.io/v1"
-kind: AzureIdentity
-metadata:
-  name: ${azurerm_user_assigned_identity.preprodkubepod.name}
-spec:
-  type: 0
-  resourceID: ${azurerm_user_assigned_identity.preprodkubepod.id}
-  clientID: ${azurerm_user_assigned_identity.preprodkubepod.client_id}
-${local.eof}
-    EOF
-  }
+data "azurerm_user_assigned_identity" "agentpool" {
+  name                = "scoparella-aks1-agentpool"
+  resource_group_name = var.aks_node_resource_group_name
 }
 
-resource "null_resource" "identity-pod-bind-identity" {
-  depends_on = [null_resource.identity-pod-add-identity]
+# The agent pool needs this access in order to write to the underlying nodes, auto-generated resource group referenced
+resource "azurerm_role_assignment" "agentpool" {
+  name                 = var.environment == "preprod" ? "0662f0f5-5c93-47cc-bacc-2f7d49f5fbb0" : "2b06db48-df00-4f64-b492-0b44109666fd"
+  principal_id         = data.azurerm_user_assigned_identity.agentpool.principal_id
+  role_definition_name = "Virtual Machine Contributor"
+  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}"
+}
+
+resource "null_resource" "aad-pod-identity" {
+  depends_on = [azurerm_role_assignment.preprodkubepod]
   provisioner "local-exec" {
     command = <<EOF
-cat << ${local.eof} | kubectl apply -f -
-apiVersion: "aadpodidentity.k8s.io/v1"
-kind: AzureIdentityBinding
-metadata:
-  name: ${azurerm_user_assigned_identity.preprodkubepod.name}-binding
-spec:
-  azureIdentity: ${azurerm_user_assigned_identity.preprodkubepod.name}
-  selector: ${azurerm_user_assigned_identity.preprodkubepod.name}
-${local.eof}
-    EOF
+    ENV="${var.environment}" bash ${path.module}/setup.sh
+  EOF
   }
 }

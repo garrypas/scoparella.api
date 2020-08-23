@@ -30,6 +30,10 @@ resource "azurerm_kubernetes_cluster" "scoparella-kube" {
   }
 }
 
+output "aks_node_resource_group_name" {
+  value = azurerm_kubernetes_cluster.scoparella-kube.node_resource_group
+}
+
 output "client_certificate" {
   value = azurerm_kubernetes_cluster.scoparella-kube.kube_config.0.client_certificate
 }
