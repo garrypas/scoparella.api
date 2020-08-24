@@ -103,7 +103,6 @@ stages:
             unzip terraform_0.12.29_linux_amd64.zip
             mv terraform ~/bin
 
-            cd resources/${{ parameters.stage }}
             terraform init
             terraform plan
             terraform apply -auto-approve
