@@ -35,15 +35,10 @@ resource "azurerm_role_assignment" "preprodkubepod" {
   scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}"
 }
 
-data "azurerm_user_assigned_identity" "agentpool" {
-  name                = "${var.environment}-scoparella-aks1-agentpool"
-  resource_group_name = var.aks_node_resource_group_name
-}
-
 # The agent pool needs this access in order to write to the underlying nodes, auto-generated resource group referenced
 resource "azurerm_role_assignment" "agentpool" {
   name                 = var.environment == "preprod" ? "0662f0f5-5c93-47cc-bacc-2f7d49f5fbb0" : "2b06db48-df00-4f64-b492-0b44109666fd"
-  principal_id         = data.azurerm_user_assigned_identity.agentpool.principal_id
+  principal_id         = var.agentpool_id
   role_definition_name = "Virtual Machine Contributor"
   scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}"
 }
@@ -51,7 +46,7 @@ resource "azurerm_role_assignment" "agentpool" {
 resource "null_resource" "aad-pod-identity" {
   depends_on = [
     azurerm_role_assignment.preprodkubepod,
-    var.cluster
+    var.agentpool_id
   ]
   provisioner "local-exec" {
     command = <<EOF

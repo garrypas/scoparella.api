@@ -13,7 +13,7 @@ module "identity-pod" {
   location                     = var.location
   resource_group_name          = local.resource_group_name
   aks_node_resource_group_name = module.cluster.aks_node_resource_group_name
-  cluster                      = module.cluster.cluster
+  agentpool_id                 = module.cluster.agentpool_id
 }
 
 module "app-pod" {
