@@ -59,10 +59,10 @@ export class RemoteSecretService {
 
     return {
       google: {
-        clientSecret: "todo",
+        clientSecret: await requestSecret("authgoog", token),
       },
       facebook: {
-        clientSecret: "todo",
+        clientSecret: await requestSecret("authfb", token),
       },
       database: {
         password: await requestSecret("dbpassword", token),
@@ -72,11 +72,44 @@ export class RemoteSecretService {
     };
   }
 }
+/*
+cat << EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo
+  labels:
+    aadpodidbinding: preprodkubepod
+spec:
+  containers:
+  - name: demo
+    image: mcr.microsoft.com/k8s/aad-pod-identity/demo:1.2
+    args:
+      - --subscriptionid=009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
+      - --clientid=005a9048-060c-4460-80ff-ccdcd073f07d
+      - --resourcegroup=preprod-scoparella-resource-group
+    env:
+      - name: MY_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: MY_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: MY_POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+  nodeSelector:
+    kubernetes.io/os: linux
+EOF
+*/
 
-// curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -H Metadata:true -s
+// curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F' -H Metadata:true -s
+// curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -H Metadata:true
 // BEARER="access token"
 // curl https://preprodscoparellavault.vault.azure.net/secrets/public-key/?api-version=7.0 -H "Authorization: Bearer $BEARER"
-
 async function requestSecret(secret: string, token: TokenResponse) {
   const uri = `https://preprodscoparellavault.vault.azure.net/secrets/${secret}/?api-version=7.0`;
   return get(uri, {

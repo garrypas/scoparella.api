@@ -15,11 +15,11 @@ module "identity-pod" {
   aks_node_resource_group_name = module.cluster.aks_node_resource_group_name
 }
 
-# module "app-pod" {
-#   source              = "../app_pod"
-#   name                = "${var.environment}-${var.name}-apppod"
-#   environment         = var.environment
-#   location            = var.location
-#   resource_group_name = local.resource_group_name
-#   sql_server_port     = 1433
-# }
+module "app-pod" {
+  source              = "../app_pod"
+  name                = "${var.environment}-${var.name}-apppod"
+  environment         = var.environment
+  location            = var.location
+  resource_group_name = local.resource_group_name
+  sql_server_port     = 1433
+}

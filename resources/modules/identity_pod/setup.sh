@@ -15,10 +15,6 @@ kubectl apply -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master
 
 IDENTITY_CLIENT_ID="$(az identity show -g $RESOURCE_GROUP -n $IDENTITY_NAME --subscription $SUBSCRIPTION_ID --query clientId -otsv)"
 IDENTITY_RESOURCE_ID="$(az identity show -g $RESOURCE_GROUP -n $IDENTITY_NAME --subscription $SUBSCRIPTION_ID --query id -otsv)"
-# IDENTITY_ASSIGNMENT_ID="$(az role assignment create --role Reader --assignee $IDENTITY_CLIENT_ID --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP --query id -otsv)"
-
-az role assignment create --role Reader --assignee de40ad91-7d9a-4c0d-ae06-d1f6aa84e747 --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP --query id -otsv
-
 
 cat << EOF | kubectl apply -f -
 apiVersion: "aadpodidentity.k8s.io/v1"

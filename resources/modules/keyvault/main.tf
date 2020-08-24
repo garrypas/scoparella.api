@@ -36,11 +36,6 @@ resource "azurerm_key_vault" "keyvault" {
     ]
   }
 
-  # network_acls {
-  #   default_action = "Deny"
-  #   bypass         = "AzureServices"
-  # }
-
   tags = {
     environment = var.environment
   }
@@ -90,6 +85,26 @@ resource "azurerm_key_vault_secret" "pubkey" {
 
 resource "azurerm_key_vault_secret" "privkey" {
   name         = "private-key"
+  value        = ""
+  key_vault_id = azurerm_key_vault.keyvault.id
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "azurerm_key_vault_secret" "authgoog" {
+  name         = "google-client-id"
+  value        = ""
+  key_vault_id = azurerm_key_vault.keyvault.id
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "azurerm_key_vault_secret" "authfb" {
+  name         = "facebook-client-id"
   value        = ""
   key_vault_id = azurerm_key_vault.keyvault.id
 
