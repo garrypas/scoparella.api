@@ -46,11 +46,10 @@ stages:
             script: |
               wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
               unzip terraform_0.12.29_linux_amd64.zip
-              mv terraform /bin/
 
-              terraform init
-              terraform plan
-              terraform apply -auto-approve
+              ./terraform init
+              ./terraform plan
+              ./terraform apply -auto-approve
             workingDirectory: "./resources/${{ parameters.stage }}"
           displayName: "Terraform data/secrets"
 
@@ -101,11 +100,10 @@ stages:
         - script: |
             wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
             unzip terraform_0.12.29_linux_amd64.zip
-            mv terraform /bin/
 
-            terraform init
-            terraform plan
-            terraform apply -auto-approve
+            ./terraform init
+            ./terraform plan
+            ./terraform apply -auto-approve
           workingDirectory: "./resources/${{ parameters.stage }}"
           displayName: 'Terraform setup cloud resources'
           condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
