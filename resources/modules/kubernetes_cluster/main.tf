@@ -6,10 +6,10 @@ data "azurerm_key_vault" "keyvault" {
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_kubernetes_cluster" "scoparella-kube" {
-  name                = "scoparella-aks1"
+  name                = "${var.environment}-scoparella-aks1"
   location            = var.location
   resource_group_name = var.resource_group_name
-  dns_prefix          = "scoparellaaks1"
+  dns_prefix          = "${var.environment}scoparellaaks1"
 
   default_node_pool {
     name       = "agentpool"
@@ -51,4 +51,8 @@ resource "azurerm_key_vault_access_policy" "aks1-agentpool" {
   secret_permissions = [
     "get", "list"
   ]
+}
+
+output "cluster" {
+  value = azurerm_kubernetes_cluster.scoparella-kube
 }

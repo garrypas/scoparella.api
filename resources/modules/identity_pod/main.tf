@@ -36,7 +36,7 @@ resource "azurerm_role_assignment" "preprodkubepod" {
 }
 
 data "azurerm_user_assigned_identity" "agentpool" {
-  name                = "scoparella-aks1-agentpool"
+  name                = "${var.environment}-scoparella-aks1-agentpool"
   resource_group_name = var.aks_node_resource_group_name
 }
 
@@ -49,7 +49,10 @@ resource "azurerm_role_assignment" "agentpool" {
 }
 
 resource "null_resource" "aad-pod-identity" {
-  depends_on = [azurerm_role_assignment.preprodkubepod]
+  depends_on = [
+    azurerm_role_assignment.preprodkubepod,
+    var.cluster
+  ]
   provisioner "local-exec" {
     command = <<EOF
     ENV="${var.environment}" bash ${path.module}/setup.sh

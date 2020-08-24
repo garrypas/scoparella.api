@@ -8,7 +8,7 @@ then
   exit 1
 fi
 
-az aks get-credentials --overwrite-existing --resource-group "$RESOURCE_GROUP" --name scoparella-aks1
+az aks get-credentials --overwrite-existing --resource-group "$RESOURCE_GROUP" --name "${ENV}-scoparella-aks1"
 
 kubectl apply -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment.yaml
 kubectl apply -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/mic-exception.yaml

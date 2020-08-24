@@ -11,6 +11,9 @@ resource "kubernetes_pod" "scoparella-api" {
       "aadpodidbinding" = "${var.environment}kubepod"
     }
   }
+  depends_on = [
+    var.cluster
+  ]
 
   spec {
     container {
