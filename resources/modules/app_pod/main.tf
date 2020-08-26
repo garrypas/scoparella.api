@@ -3,93 +3,103 @@ data "azurerm_sql_server" "instance" {
   resource_group_name = var.resource_group_name
 }
 
-resource "kubernetes_pod" "scoparella-api" {
-  metadata {
-    name = "scoparella-api"
-    labels = {
-      "group"           = "app"
-      "aadpodidbinding" = "${var.environment}kubepod"
-    }
+resource "null_resource" "aks-login" {
+  provisioner "local-exec" {
+    command = "az aks get-credentials --overwrite-existing --resource-group ${var.resource_group_name} --name ${var.environment}-scoparella-aks1"
   }
   depends_on = [
     var.cluster
   ]
-
-  spec {
-    container {
-      image = "garrypassarella/scoparella:scoparella_api_${var.environment}"
-      name  = "scoparella-api"
-
-      env {
-        name  = "HOST"
-        value = "0.0.0.0"
-      }
-
-      env {
-        name  = "LOG_LEVEL"
-        value = "info"
-      }
-
-      env {
-        name  = "environment"
-        value = var.environment
-      }
-
-      env {
-        name  = "DB_HOST"
-        value = data.azurerm_sql_server.instance.fqdn
-      }
-
-      env {
-        name  = "DB_PORT"
-        value = var.sql_server_port
-      }
-
-      port {
-        container_port = 3000
-      }
-
-      liveness_probe {
-        http_get {
-          path = "/ping"
-          port = 3000
-        }
-
-        initial_delay_seconds = 300
-        period_seconds        = 3
-      }
-    }
-
-    dns_config {
-      nameservers = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
-
-      option {
-        name  = "ndots"
-        value = 1
-      }
-
-      option {
-        name = "use-vc"
-      }
-    }
-
-    dns_policy = "None"
-  }
 }
 
-resource "kubernetes_service" "scoparella-api-lb" {
-  metadata {
-    name = "scoparella-api-service"
-  }
-  spec {
-    selector = {
-      app = kubernetes_pod.scoparella-api.metadata.0.labels.group
-    }
-    port {
-      port        = 80
-      target_port = 3000
-    }
+# resource "kubernetes_pod" "scoparella-api" {
+#   metadata {
+#     name = "scoparella-api"
+#     labels = {
+#       "group"           = "app"
+#       "aadpodidbinding" = var.user_assigned_identity_aad
+#     }
+#   }
 
-    type = "LoadBalancer"
-  }
-}
+#   depends_on = [
+#     null_resource.aks-login
+#   ]
+
+#   spec {
+#     container {
+#       image = "garrypassarella/scoparella:scoparella_api_${var.environment}"
+#       name  = "scoparella-api"
+
+#       env {
+#         name  = "HOST"
+#         value = "0.0.0.0"
+#       }
+
+#       env {
+#         name  = "LOG_LEVEL"
+#         value = "info"
+#       }
+
+#       env {
+#         name  = "environment"
+#         value = var.environment
+#       }
+
+#       env {
+#         name  = "DB_HOST"
+#         value = data.azurerm_sql_server.instance.fqdn
+#       }
+
+#       env {
+#         name  = "DB_PORT"
+#         value = var.sql_server_port
+#       }
+
+#       port {
+#         container_port = 3000
+#       }
+
+#       liveness_probe {
+#         http_get {
+#           path = "/ping"
+#           port = 3000
+#         }
+
+#         initial_delay_seconds = 300
+#         period_seconds        = 3
+#       }
+#     }
+
+#     dns_config {
+#       nameservers = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
+
+#       option {
+#         name  = "ndots"
+#         value = 1
+#       }
+
+#       option {
+#         name = "use-vc"
+#       }
+#     }
+
+#     dns_policy = "None"
+#   }
+# }
+
+# resource "kubernetes_service" "scoparella-api-lb" {
+#   metadata {
+#     name = "scoparella-api-service"
+#   }
+#   spec {
+#     selector = {
+#       app = kubernetes_pod.scoparella-api.metadata.0.labels.group
+#     }
+#     port {
+#       port        = 80
+#       target_port = 3000
+#     }
+
+#     type = "LoadBalancer"
+#   }
+# }

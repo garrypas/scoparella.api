@@ -7,3 +7,4 @@ variable agentpool_id {}
 locals {
   eof = "EOF"
 }
+variable cluster {}

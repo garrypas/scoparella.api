@@ -2,10 +2,10 @@
 data "azurerm_subscription" "current" {}
 data "azurerm_client_config" "current" {}
 
-resource "azurerm_user_assigned_identity" "preprodkubepod" {
+resource "azurerm_user_assigned_identity" "kubepod" {
   resource_group_name = var.resource_group_name
   location            = var.location
-  name                = "preprodkubepod"
+  name                = "${var.environment}kubepod"
 }
 
 data "azurerm_key_vault" "keyvault" {
@@ -17,7 +17,7 @@ resource "azurerm_key_vault_access_policy" "identity-pod" {
   key_vault_id = data.azurerm_key_vault.keyvault.id
 
   tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = azurerm_user_assigned_identity.preprodkubepod.principal_id
+  object_id = azurerm_user_assigned_identity.kubepod.principal_id
 
   key_permissions = [
     "get", "list"
@@ -28,9 +28,9 @@ resource "azurerm_key_vault_access_policy" "identity-pod" {
   ]
 }
 
-resource "azurerm_role_assignment" "preprodkubepod" {
+resource "azurerm_role_assignment" "kubepod" {
   name                 = var.environment == "preprod" ? "3cc708cd-07c3-4913-b4dd-d0372f4526dc" : "4dd819de-18d4-5a24-c5ee-e148305637ed"
-  principal_id         = azurerm_user_assigned_identity.preprodkubepod.principal_id
+  principal_id         = azurerm_user_assigned_identity.kubepod.principal_id
   role_definition_name = "Reader"
   scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}"
 }
@@ -43,14 +43,19 @@ resource "azurerm_role_assignment" "agentpool" {
   scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}"
 }
 
-resource "null_resource" "aad-pod-identity" {
-  depends_on = [
-    azurerm_role_assignment.preprodkubepod,
-    var.agentpool_id
-  ]
-  provisioner "local-exec" {
-    command = <<EOF
-    ENV="${var.environment}" bash ${path.module}/setup.sh
-  EOF
-  }
+# resource "null_resource" "aad-pod-identity" {
+#   depends_on = [
+#     azurerm_role_assignment.kubepod,
+#     var.agentpool_id,
+#     var.cluster
+#   ]
+#   provisioner "local-exec" {
+#     command = <<EOF
+#     ENV="${var.environment}" bash ${path.module}/setup.sh
+#   EOF
+#   }
+# }
+
+output "user_assigned_identity_aad" {
+  value = azurerm_user_assigned_identity.kubepod.name
 }

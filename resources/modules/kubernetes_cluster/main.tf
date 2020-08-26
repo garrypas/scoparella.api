@@ -54,9 +54,9 @@ resource "azurerm_key_vault_access_policy" "aks1-agentpool" {
 }
 
 output "cluster" {
-  value = azurerm_kubernetes_cluster.scoparella-kube
+  value = azurerm_kubernetes_cluster.scoparella-kube.id
 }
 
 output "agentpool_id" {
-  value = azurerm_kubernetes_cluster.scoparella-kube.identity[0].principal_id
+  value = azurerm_kubernetes_cluster.scoparella-kube.kubelet_identity[0].object_id
 }
