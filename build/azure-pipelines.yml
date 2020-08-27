@@ -107,7 +107,16 @@ stages:
           workingDirectory: "./resources/${{ parameters.stage }}"
           displayName: 'Terraform setup cloud resources'
           condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
-
+        - script: |
+            ENV="${{ variables.env }}" bash setup.sh
+          workingDirectory: "./resources/identity_pod"
+          displayName: "Identity Pod"
+          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'pods') )
+        - script: |
+            ENV="${{ variables.env }}" bash setup.sh
+          workingDirectory: "./resources/app_pod"
+          displayName: "Application Pod"
+          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'pods') )
         - task: Bash@3
           inputs:
             targetType: 'inline'

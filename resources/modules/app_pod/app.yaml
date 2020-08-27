@@ -1,41 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "scoparella-api"
-  labels:
-    group: "app"
-    aadpodidbinding: "$ENVkubepod"
-  spec:
-    containers:
-      - name: "scoparella-api"
-        image: "garrypassarella/scoparella:scoparella_api_$ENV"
-        ports:
-          - containerPort: 3000
-        env:
-          - name: HOST
-            value: "0.0.0.0"
-          - name: LOG_LEVEL
-            value: "info"
-          - name: environment
-            value: "$ENV"
-          - name: DB_HOST
-            value: "$DB_HOST"
-          - name: DB_PORT
-            value: "$DB_PORT"
-        livenessProbe:
-          httpGet:
-            path: /ping
-            port: 3000
-        initialDelaySeconds: 300
-        periodSeconds: 3
-    dnsPolicy: None
-    dnsConfig:
-      nameservers:
-        - "1.1.1.1"
-        - "8.8.8.8"
-        - "9.9.9.9"
-      option:
-        - name: "ndots"
-          value: "1"
-        - na
-        - name: "use-vc"
+  name: "scoparella-api-deployment"
+spec:
+  selector:
+    matchLabels:
+      group: "app"
+  template:
+    metadata:
+      labels:
+        group: "app"
+        aadpodidbinding: "${ENV}kubepod"
+    spec:
+      containers:
+        - name: "scoparella-api"
+          image: "garrypassarella/scoparella:scoparella_api_${ENV}"
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+          env:
+            - name: HOST
+              value: "0.0.0.0"
+            - name: LOG_LEVEL
+              value: "info"
+            - name: environment
+              value: "$ENV"
+            - name: DB_HOST
+              value: "$DB_HOST"
+            - name: DB_PORT
+              value: "$DB_PORT"
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 3000
+            initialDelaySeconds: 300
+            periodSeconds: 3
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - "1.1.1.1"
+          - "8.8.8.8"
+          - "9.9.9.9"
+        options:
+          - name: "ndots"
+            value: "1"
+          - name: "use-vc"

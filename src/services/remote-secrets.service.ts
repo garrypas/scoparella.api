@@ -41,7 +41,7 @@ export class RemoteSecretService {
     }
     let token: TokenResponse;
     try {
-      logger.info("Making call to the remote secret store");
+      logger.info("Making call to get a bearer token to access key vault");
       token = await get(
         "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net",
         {
@@ -72,64 +72,35 @@ export class RemoteSecretService {
     };
   }
 }
-/*
-cat << EOF | kubectl apply -f -
-apiVersion: v1
-kind: Pod
-metadata:
-  name: demo
-  labels:
-    aadpodidbinding: preprodkubepod
-spec:
-  containers:
-  - name: demo
-    image: mcr.microsoft.com/k8s/aad-pod-identity/demo:1.2
-    args:
-      - --subscriptionid=009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
-      - --clientid=005a9048-060c-4460-80ff-ccdcd073f07d
-      - --resourcegroup=preprod-scoparella-resource-group
-    env:
-      - name: MY_POD_NAME
-        valueFrom:
-          fieldRef:
-            fieldPath: metadata.name
-      - name: MY_POD_NAMESPACE
-        valueFrom:
-          fieldRef:
-            fieldPath: metadata.namespace
-      - name: MY_POD_IP
-        valueFrom:
-          fieldRef:
-            fieldPath: status.podIP
-  nodeSelector:
-    kubernetes.io/os: linux
-EOF
-*/
 
-// curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F' -H Metadata:true -s
-// curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net' -H Metadata:true
-// BEARER="access token"
-// curl https://preprodscoparellavault.vault.azure.net/secrets/public-key/?api-version=7.0 -H "Authorization: Bearer $BEARER"
-async function requestSecret(secret: string, token: TokenResponse) {
+async function requestSecret(
+  secret: string,
+  token: TokenResponse,
+): Promise<string> {
   const uri = `https://preprodscoparellavault.vault.azure.net/secrets/${secret}/?api-version=7.0`;
-  return get(uri, {
-    headers: {
-      Authorization: `${token.token_type} ${token.access_token}`,
-    },
-  })
-    .then(() => logger.info(`Retrieved secret ${secret}`))
-    .catch(err => logger.error(`Failed to get secret '${secret} - ${err}'`));
+  let result = null;
+  try {
+    result = await get(uri, {
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      },
+    });
+  } catch (err) {
+    logger.error(`Failed to get secret '${secret} - ${err}'`);
+    throw err;
+  }
+  logger.info(`Retrieved secret ${secret}`);
+  return result.value;
 }
-async function get(
-  url: string,
-  options: http_options | https_options,
-): Promise<any> {
+function get(url: string, options: http_options | https_options): Promise<any> {
   return new Promise((resolve, reject) => {
     const getter = url.startsWith("https") ? https_get : http_get;
     getter(url, options, function (res) {
       const statusCode = res.statusCode;
       if (!statusCode || statusCode >= 300) {
-        return reject(`Failed to get secret with status code ${statusCode}`);
+        return reject(
+          `Request to ${url} failed with status code ${statusCode}`,
+        );
       }
       res.setEncoding("utf8");
       let rawData = "";
@@ -138,7 +109,7 @@ async function get(
       });
       res.on("end", () => {
         try {
-          resolve(JSON.parse(rawData).access_token);
+          resolve(JSON.parse(rawData));
         } catch (e) {
           reject(e.message);
         }

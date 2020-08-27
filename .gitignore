@@ -68,3 +68,4 @@ secrets.json
 RS512.key
 RS512.key.pub
 .terraform/
+notes.txt

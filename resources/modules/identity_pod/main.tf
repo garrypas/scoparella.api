@@ -36,25 +36,19 @@ resource "azurerm_role_assignment" "kubepod" {
 }
 
 # The agent pool needs this access in order to write to the underlying nodes, auto-generated resource group referenced
-resource "azurerm_role_assignment" "agentpool" {
+resource "azurerm_role_assignment" "agentpool_vm_contributor" {
   name                 = var.environment == "preprod" ? "0662f0f5-5c93-47cc-bacc-2f7d49f5fbb0" : "2b06db48-df00-4f64-b492-0b44109666fd"
   principal_id         = var.agentpool_id
   role_definition_name = "Virtual Machine Contributor"
-  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}"
+  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${var.aks_resource_group}"
 }
 
-# resource "null_resource" "aad-pod-identity" {
-#   depends_on = [
-#     azurerm_role_assignment.kubepod,
-#     var.agentpool_id,
-#     var.cluster
-#   ]
-#   provisioner "local-exec" {
-#     command = <<EOF
-#     ENV="${var.environment}" bash ${path.module}/setup.sh
-#   EOF
-#   }
-# }
+resource "azurerm_role_assignment" "agentpool_managed_identity" {
+  name                 = var.environment == "preprod" ? "ae044092-addd-487b-8ab5-7bf593dec8df" : "ce04d0e1-adfd-b57e-1ab2-6bf593dec8de"
+  principal_id         = var.agentpool_id
+  role_definition_name = "Contributor"
+  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}/providers/microsoft.managedidentity/userassignedidentities/${azurerm_user_assigned_identity.kubepod.name}"
+}
 
 output "user_assigned_identity_aad" {
   value = azurerm_user_assigned_identity.kubepod.name

@@ -60,3 +60,7 @@ output "cluster" {
 output "agentpool_id" {
   value = azurerm_kubernetes_cluster.scoparella-kube.kubelet_identity[0].object_id
 }
+
+output "aks_resource_group" {
+  value = azurerm_kubernetes_cluster.scoparella-kube.node_resource_group
+}
