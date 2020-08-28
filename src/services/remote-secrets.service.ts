@@ -102,7 +102,7 @@ function get(url: string, options: http_options | https_options): Promise<any> {
       const statusCode = res.statusCode;
       if (!statusCode || statusCode >= 300) {
         return reject(
-          `Request to ${url} failed with status code ${statusCode}`,
+          `Request to ${url} failed with status code ${statusCode}, ${res.statusMessage}`,
         );
       }
       res.setEncoding("utf8");
