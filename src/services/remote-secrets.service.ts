@@ -78,6 +78,9 @@ async function requestSecret(
   token: TokenResponse,
 ): Promise<string> {
   const uri = `https://preprodscoparellavault.vault.azure.net/secrets/${secret}/?api-version=7.0`;
+  logger.info(
+    `Getting secret, using a ${token.token_type} token to authenticate...`,
+  );
   let result = null;
   try {
     result = await get(uri, {
