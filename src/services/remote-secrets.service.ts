@@ -59,10 +59,10 @@ export class RemoteSecretService {
 
     return {
       google: {
-        clientSecret: await requestSecret("authgoog", token),
+        clientSecret: await requestSecret("google-client-id", token),
       },
       facebook: {
-        clientSecret: await requestSecret("authfb", token),
+        clientSecret: await requestSecret("facebook-client-id", token),
       },
       database: {
         password: await requestSecret("dbpassword", token),
