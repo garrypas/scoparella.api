@@ -12,6 +12,7 @@ fi
 echo "Insert password for placeholder..."
 sed -i'' -e "s|<PASSWORD>|$APP_PASSWORD|g" "$MODULE_PATH/setup-database.sql"
 sqlcmd -S "$ENV-scoparella-database-instance.database.windows.net" -d "master" -U scoparella_admin -P "$PASSWORD" -i "$MODULE_PATH/setup-database.sql"
+sqlcmd -S "$ENV-scoparella-database-instance.database.windows.net" -d "scoparella" -U scoparella_admin -P "$PASSWORD" -i "$MODULE_PATH/setup-roles.sql"
 echo "Put password placeholder back..."
 sed -i'' -e "s|$APP_PASSWORD|<PASSWORD>|g" "$MODULE_PATH/setup-database.sql"
 rm -rf ./*.sql-*
