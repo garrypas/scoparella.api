@@ -15,9 +15,11 @@ export class GameDataSource extends juggler.DataSource
     super(GameDataSource.getDbConfig(secrets, config, logger));
   }
 
-  private static getDbConfig(config: any, secrets: any, logger: Logger): any {
+  private static getDbConfig(secrets: any, config: any, logger: Logger): any {
     logger.info(
-      `Setting up database connection with config ${JSON.stringify(config)}`,
+      `Setting up database connection with config ${JSON.stringify(
+        config.database,
+      )}`,
     );
     return Object.assign({}, config.database, secrets.database);
   }
