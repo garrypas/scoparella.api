@@ -10,6 +10,7 @@ resource "azurerm_kubernetes_cluster" "scoparella-kube" {
   location            = var.location
   resource_group_name = var.resource_group_name
   dns_prefix          = "${var.environment}scoparellaaks1"
+  node_resource_group = "${var.environment}-scoparella-aks-rg"
 
   default_node_pool {
     name       = "agentpool"
