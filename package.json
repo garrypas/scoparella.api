@@ -29,7 +29,7 @@
     "migrate": "node ./dist/migrate",
     "openapi-spec": "node ./dist/openapi-spec",
     "prestart": "npm run build",
-    "start": "HOST=localhost environment=preprod DB_HOST=preprod-scoparella-database-instance.database.windows.net DB_PORT=1433 LOG_LEVEL=info node -r source-map-support/register .",
+    "start": "TEST=1 HOST=localhost environment=dev DB_HOST=localhost DB_PORT=1440 LOG_LEVEL=info node -r source-map-support/register .",
     "predocker:app": "npm run docker:app:down",
     "docker:app": "npm run docker:deps && sleep 20 && docker-compose -f src/__tests__/docker/app/docker-compose.yml up -d && sleep 5",
     "docker:app:down": "docker-compose -f src/__tests__/docker/app/docker-compose.yml down | npm run docker:deps:down",

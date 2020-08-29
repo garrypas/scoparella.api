@@ -19,25 +19,18 @@ type TokenResponse = {
 
 export class RemoteSecretService {
   static async getSecrets(): Promise<any> {
-    if (process.env.TEST) {
+    if (process.env.environment === "dev") {
       const config = ConfigService.getConfig();
-      return {
-        google: {
-          clientSecret: "todo",
-        },
-        facebook: {
-          clientSecret: "todo",
-        },
-        database: {
-          password: "P@ss55w0rd",
-        },
-        publicKey: readFileSync(config.keys.publicKey, {
-          encoding: "utf-8",
-        }),
-        privateKey: readFileSync(config.keys.privateKey, {
-          encoding: "utf-8",
-        }),
-      };
+      const secrets = JSON.parse(
+        readFileSync("./secrets.json", {encoding: "utf-8"}),
+      );
+      secrets.publicKey = readFileSync(config.keys.publicKey, {
+        encoding: "utf-8",
+      });
+      secrets.privateKey = readFileSync(config.keys.privateKey, {
+        encoding: "utf-8",
+      });
+      return secrets;
     }
     let token: TokenResponse;
     try {

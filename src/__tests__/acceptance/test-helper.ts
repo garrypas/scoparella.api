@@ -3,8 +3,31 @@ import {
   createRestAppClient,
   givenHttpServerConfig,
 } from "@loopback/testlab";
+import {readFileSync} from "fs";
 import {ScoparellaApiApplication} from "../..";
-import {SecretsService} from "../../services";
+import {ConfigService} from "../../services";
+
+export function getSecrets() {
+  const config = ConfigService.getConfig();
+
+  return {
+    google: {
+      clientSecret: "todo",
+    },
+    facebook: {
+      clientSecret: "todo",
+    },
+    database: {
+      password: "P@ss55w0rd",
+    },
+    publicKey: readFileSync(config.keys.publicKey, {
+      encoding: "utf-8",
+    }),
+    privateKey: readFileSync(config.keys.privateKey, {
+      encoding: "utf-8",
+    }),
+  };
+}
 
 export async function setupApplication(): Promise<AppWithClient> {
   const restConfig = givenHttpServerConfig({
@@ -19,7 +42,7 @@ export async function setupApplication(): Promise<AppWithClient> {
     {
       rest: restConfig,
     },
-    await SecretsService.getSecrets(),
+    getSecrets(),
   );
   await app.boot();
   await app.start();

@@ -15,6 +15,7 @@ spec:
       containers:
         - name: "scoparella-api"
           image: "garrypassarella/scoparella:scoparella_api_${ENV}"
+          imagePullPolicy: "Always"
           ports:
             - containerPort: 3000
           resources:

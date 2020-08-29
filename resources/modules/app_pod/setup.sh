@@ -16,6 +16,7 @@ template() {
 export DB_HOST=$(az sql server show --resource-group "$ENV-scoparella-resource-group" --name "$ENV-scoparella-database-instance" --query fullyQualifiedDomainName -otsv)
 export DB_PORT="1433"
 
+export RESOURCE_GROUP="${ENV}-scoparella-resource-group"
 az aks get-credentials --overwrite-existing --resource-group "$RESOURCE_GROUP" --name "${ENV}-scoparella-aks1"
 
 template "app.yaml"

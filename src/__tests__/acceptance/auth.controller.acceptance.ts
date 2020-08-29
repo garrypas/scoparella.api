@@ -3,9 +3,8 @@ import {verify} from "jsonwebtoken";
 import {Strategy as FacebookStrategy} from "passport-facebook";
 import {Strategy as GoogleStrategy} from "passport-google-oauth2";
 import {ScoparellaApiApplication} from "../..";
-import {SecretsService} from "../../services/secrets.service";
 import {PassportStubBuilder} from "./../builders/";
-import {setupApplication} from "./test-helper";
+import {getSecrets, setupApplication} from "./test-helper";
 const profiles: Record<string, object> = {
   facebook: require("./../testData/facebook-profile.json"),
   google: require("./../testData/google-profile.json"),
@@ -17,7 +16,7 @@ describe("AuthController", () => {
   let secrets: any;
   before("setupApplication", async () => {
     ({app, client} = await setupApplication());
-    secrets = await SecretsService.getSecrets();
+    secrets = getSecrets();
   });
 
   after(async () => {

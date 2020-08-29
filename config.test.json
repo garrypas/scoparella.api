@@ -5,7 +5,7 @@
     "connector": "mssql",
     "host": "localhost",
     "port": 1440,
-    "user": "scoparella",
+    "user": "sa",
     "database": "scoparella",
     "schema": "scopa"
   },
