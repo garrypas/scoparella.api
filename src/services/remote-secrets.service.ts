@@ -58,7 +58,7 @@ export class RemoteSecretService {
         clientSecret: await requestSecret("facebook-client-id", token),
       },
       database: {
-        password: await requestSecret("dbpassword", token),
+        password: await requestSecret("dbapppassword", token),
       },
       publicKey: await requestSecret("public-key", token),
       privateKey: await requestSecret("private-key", token),
