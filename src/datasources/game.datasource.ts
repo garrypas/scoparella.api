@@ -1,5 +1,6 @@
 import {inject, lifeCycleObserver, LifeCycleObserver} from "@loopback/core";
 import {juggler} from "@loopback/repository";
+import {Logger} from "../Logger";
 
 @lifeCycleObserver("datasource")
 export class GameDataSource extends juggler.DataSource
@@ -9,7 +10,15 @@ export class GameDataSource extends juggler.DataSource
   constructor(
     @inject("secrets.json") secrets: any,
     @inject("config.json") config: any,
+    @inject("logger") logger: Logger,
   ) {
-    super(Object.assign({}, config.database, secrets.database));
+    super(GameDataSource.getDbConfig(secrets, config, logger));
+  }
+
+  private static getDbConfig(config: any, secrets: any, logger: Logger): any {
+    logger.info(
+      `Setting up database connection with config ${JSON.stringify(config)}`,
+    );
+    return Object.assign({}, config.database, secrets.database);
   }
 }
