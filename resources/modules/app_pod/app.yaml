@@ -5,11 +5,11 @@ metadata:
 spec:
   selector:
     matchLabels:
-      group: "app"
+      app: "scoparella-app"
   template:
     metadata:
       labels:
-        group: "app"
+        app: "scoparella-app"
         aadpodidbinding: "${ENV}kubepod"
     spec:
       containers:

@@ -5,7 +5,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: app
+    app: scoparella-app
   ports:
     - protocol: TCP
       port: 80
