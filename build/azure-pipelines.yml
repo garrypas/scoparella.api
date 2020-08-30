@@ -41,7 +41,7 @@ stages:
             displayName: "Azure login"
 
           - task: Bash@3
-            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform'), eq('${{ parameters.task }}', 'pods') )
             inputs:
               targetType: "inline"
               script: |
