@@ -110,12 +110,12 @@ stages:
             condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
           - script: |
               ENV="${{ variables.env }}" bash setup.sh
-            workingDirectory: "./resources/identity_pod"
+            workingDirectory: "./resources/modules/identity_pod"
             displayName: "Identity Pod"
             condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'pods') )
           - script: |
               ENV="${{ variables.env }}" bash setup.sh
-            workingDirectory: "./resources/app_pod"
+            workingDirectory: "./resources/modules/app_pod"
             displayName: "Application Pod"
             condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'pods') )
           - task: Bash@3
