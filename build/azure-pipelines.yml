@@ -41,7 +41,7 @@ stages:
             displayName: "Azure login"
 
           - task: Bash@3
-            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform'), eq('${{ parameters.task }}', 'pods') )
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
             inputs:
               targetType: "inline"
               script: |
@@ -70,7 +70,7 @@ stages:
               az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
               az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
             displayName: "Azure login"
-            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform'), eq('${{ parameters.task }}', 'database') )
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform'), eq('${{ parameters.task }}', 'database'), eq('${{ parameters.task }}', 'pods') )
 
           - task: NodeTool@0
             inputs:
