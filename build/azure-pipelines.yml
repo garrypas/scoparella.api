@@ -1,29 +1,30 @@
 trigger: none
-  # branches:
-  #   include:
-  #     - master
-  # paths:
-  #   exclude:
-  #     - documentation/*
-  #     - README.md
+# branches:
+#   include:
+#     - master
+# paths:
+#   exclude:
+#     - documentation/*
+#     - README.md
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 parameters:
-- name: stage
-  default: "preprod"
-  values:
-    - preprod_init
-    - preprod
-- name: task
-  default: "*"
-  values:
-    - "*"
-    - docker
-    - terraform
-    - database
-    - test
+  - name: stage
+    default: "preprod"
+    values:
+      - preprod_init
+      - preprod
+  - name: task
+    default: "*"
+    values:
+      - "*"
+      - docker
+      - terraform
+      - database
+      - test
+      - pods
 
 variables:
   env: ${{ replace(parameters.stage, '_init', '') }}
@@ -34,16 +35,70 @@ stages:
       - job: "Initial_Setup"
         condition: contains('${{ parameters.stage }}', '_init')
         steps:
-        - script: |
-            az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
-            az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
-          displayName: "Azure login"
+          - script: |
+              az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
+              az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
+            displayName: "Azure login"
 
-        - task: Bash@3
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
-          inputs:
-            targetType: 'inline'
-            script: |
+          - task: Bash@3
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
+            inputs:
+              targetType: "inline"
+              script: |
+                wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
+                unzip terraform_0.12.29_linux_amd64.zip
+
+                ./terraform init
+                ./terraform plan
+                ./terraform apply -auto-approve
+              workingDirectory: "./resources/${{ parameters.stage }}"
+            displayName: "Terraform data/secrets"
+
+          - task: Bash@3
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'database') )
+            inputs:
+              targetType: "inline"
+              script: |
+                MODULE_PATH="." ENV="${{ variables.env }}" bash ./setup-database.sh
+              workingDirectory: "./resources/modules/database"
+            displayName: "Scaffold database"
+
+      - job: "Build"
+        condition: not(contains('${{ parameters.stage }}', '_init'))
+        steps:
+          - script: |
+              az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
+              az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
+            displayName: "Azure login"
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform'), eq('${{ parameters.task }}', 'database') )
+
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "12.x"
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'test'), eq('${{ parameters.task }}', 'npm') )
+
+          - script: |
+              npm i && npm run build
+            displayName: "NPM install and build"
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'test'), eq('${{ parameters.task }}', 'npm') )
+
+          - script: |
+              npm run test:docker
+            displayName: "Run tests"
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'test') )
+
+          - task: Docker@2
+            displayName: Build and Push
+            inputs:
+              containerRegistry: "dockerscoparella"
+              repository: "garrypassarella/scoparella"
+              command: "buildAndPush"
+              Dockerfile: "Dockerfile"
+              tags: |
+                scoparella_api_${{ variables.env }}
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'docker') )
+
+          - script: |
               wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
               unzip terraform_0.12.29_linux_amd64.zip
 
@@ -51,77 +106,23 @@ stages:
               ./terraform plan
               ./terraform apply -auto-approve
             workingDirectory: "./resources/${{ parameters.stage }}"
-          displayName: "Terraform data/secrets"
-
-        - task: Bash@3
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'database') )
-          inputs:
-            targetType: 'inline'
-            script: |
-              MODULE_PATH="." ENV="${{ variables.env }}" bash ./setup-database.sh
-            workingDirectory: "./resources/modules/database"
-          displayName: "Scaffold database"
-
-      - job: "Build"
-        condition: not(contains('${{ parameters.stage }}', '_init'))
-        steps:
-        - script: |
-            az login -u "$AZURE_USERNAME" -p "$AZURE_PASSWORD"
-            az account set --subscription 009e0a99-8c4c-49fb-8efb-e79bdaeb58d0
-          displayName: "Azure login"
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform'), eq('${{ parameters.task }}', 'database') )
-
-        - task: NodeTool@0
-          inputs:
-            versionSpec: '12.x'
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'test'), eq('${{ parameters.task }}', 'npm') )
-
-        - script: |
-            npm i && npm run build
-          displayName: 'NPM install and build'
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'test'), eq('${{ parameters.task }}', 'npm') )
-
-        - script: |
-            npm run test:docker
-          displayName: 'Run tests'
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'test') )
-
-        - task: Docker@2
-          displayName: Build and Push
-          inputs:
-            containerRegistry: 'dockerscoparella'
-            repository: 'garrypassarella/scoparella'
-            command: 'buildAndPush'
-            Dockerfile: 'Dockerfile'
-            tags: |
-              scoparella_api_${{ variables.env }}
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'docker') )
-
-        - script: |
-            wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
-            unzip terraform_0.12.29_linux_amd64.zip
-
-            ./terraform init
-            ./terraform plan
-            ./terraform apply -auto-approve
-          workingDirectory: "./resources/${{ parameters.stage }}"
-          displayName: 'Terraform setup cloud resources'
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
-        - script: |
-            ENV="${{ variables.env }}" bash setup.sh
-          workingDirectory: "./resources/identity_pod"
-          displayName: "Identity Pod"
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'pods') )
-        - script: |
-            ENV="${{ variables.env }}" bash setup.sh
-          workingDirectory: "./resources/app_pod"
-          displayName: "Application Pod"
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'pods') )
-        - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            script: |
-              MODULE_PATH="." ENV="${{ variables.env }}" bash ./apply-database-objects.sh
-            workingDirectory: "./resources/modules/database_update"
-          displayName: "Apply database objects"
-          condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'database') )
+            displayName: "Terraform setup cloud resources"
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'terraform') )
+          - script: |
+              ENV="${{ variables.env }}" bash setup.sh
+            workingDirectory: "./resources/identity_pod"
+            displayName: "Identity Pod"
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'pods') )
+          - script: |
+              ENV="${{ variables.env }}" bash setup.sh
+            workingDirectory: "./resources/app_pod"
+            displayName: "Application Pod"
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'pods') )
+          - task: Bash@3
+            inputs:
+              targetType: "inline"
+              script: |
+                MODULE_PATH="." ENV="${{ variables.env }}" bash ./apply-database-objects.sh
+              workingDirectory: "./resources/modules/database_update"
+            displayName: "Apply database objects"
+            condition: or( eq('${{ parameters.task }}', '*'), eq('${{ parameters.task }}', 'database') )
