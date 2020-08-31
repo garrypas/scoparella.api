@@ -22,7 +22,13 @@ export class GameAuthorizationHandler {
     public gameRepository: GameRepository,
   ) {}
   async handle(route: ResolvedRoute, request: Request) {
-    const controllerClass = await (await this.getController()).prototype;
+    let controller;
+    try {
+      controller = await this.getController();
+    } catch (err) {
+      return;
+    }
+    const controllerClass = controller.prototype;
     const methodName: string = await this.getMethod();
     const metadata = MetadataInspector.getMethodMetadata<
       GameAuthorizationMetadata
