@@ -13,11 +13,11 @@
       "module": "passport-google-oauth2",
       "strategy": "OAuth2Strategy",
       "clientID": "212655345511-daoif0tgg2l84latd1m09vdded7n1pb6.apps.googleusercontent.com",
-      "callbackURL": "/api/auth/thirdparty/google/callback",
-      "authPath": "/api/auth/thirdparty/google",
-      "callbackPath": "/api/auth/thirdparty/google/callback",
-      "successRedirect": "/auth/account",
-      "failureRedirect": "/login",
+      "callbackURL": "https://scoparella-api-test.azure-api.net/api/auth/thirdparty/google/callback",
+      "authPath": "https://scoparella-api-test.azure-api.net/api/auth/thirdparty/google",
+      "callbackPath": "https://scoparella-api-test.azure-api.net/api/auth/thirdparty/google/callback",
+      "successRedirect": "https://scoparella-api-test.azure-api.net/auth/account",
+      "failureRedirect": "https://scoparella-api-test.azure-api.net/login",
       "scope": [
         "email",
         "profile"
@@ -39,11 +39,11 @@
         "displayName",
         "id"
       ],
-      "callbackURL": "/api/auth/thirdparty/facebook/callback",
-      "authPath": "/api/auth/thirdparty/facebook",
-      "callbackPath": "/api/auth/thirdparty/facebook/callback",
-      "successRedirect": "/auth/account",
-      "failureRedirect": "/login",
+      "callbackURL": "https://scoparella-api-test.azure-api.net/api/auth/thirdparty/facebook/callback",
+      "authPath": "https://scoparella-api-test.azure-api.net/api/auth/thirdparty/facebook",
+      "callbackPath": "https://scoparella-api-test.azure-api.net/api/auth/thirdparty/facebook/callback",
+      "successRedirect": "https://scoparella-api-test.azure-api.net/auth/account",
+      "failureRedirect": "https://scoparella-api-test.azure-api.net/login",
       "scope": [
         "email"
       ],

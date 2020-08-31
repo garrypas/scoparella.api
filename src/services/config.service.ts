@@ -6,7 +6,9 @@ export class ConfigService {
     if (!this.config) {
       const path = resolve(
         __dirname,
-        `../../config${process.env.TEST ? ".test" : ""}.json`,
+        `../../config${
+          process.env.TEST ? ".test" : `.${process.env.environment}`
+        }.json`,
       );
       this.config = JSON.parse(
         readFileSync(path, {
